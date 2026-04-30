@@ -19,64 +19,53 @@
     background: #fff;
     border-bottom: 1px solid #e2e0d8;
     padding: 0 28px;
-    height: 56px;
+    height: 54px;
     display: flex;
     align-items: center;
-    gap: 14px;
     position: sticky;
     top: 0;
     z-index: 10;
   }
 
-  .logo {
-    font-size: 15px;
-    font-weight: 600;
-    color: #1a1a1a;
-    letter-spacing: -0.01em;
-  }
-
-  .logo span {
-    color: #6b7280;
-    font-weight: 400;
-  }
+  .logo { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+  .logo span { color: #9ca3af; font-weight: 400; }
 
   .main {
-    max-width: 820px;
+    max-width: 860px;
     margin: 0 auto;
-    padding: 32px 24px 60px;
+    padding: 28px 20px 80px;
   }
 
   .card {
     background: #fff;
     border: 1px solid #e2e0d8;
     border-radius: 12px;
-    padding: 24px;
-    margin-bottom: 16px;
+    padding: 22px 24px;
+    margin-bottom: 14px;
   }
 
   .card-title {
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 600;
-    color: #6b7280;
+    color: #9ca3af;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-bottom: 16px;
+    letter-spacing: 0.08em;
+    margin-bottom: 14px;
   }
 
   .fields-row {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 14px;
-    margin-bottom: 16px;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 12px;
   }
 
-  @media (max-width: 600px) {
-    .fields-row { grid-template-columns: 1fr; }
+  @media (max-width: 640px) {
+    .fields-row { grid-template-columns: 1fr 1fr; }
   }
 
-  label {
+  .field label {
     display: block;
-    font-size: 11.5px;
+    font-size: 11px;
     font-weight: 500;
     color: #9ca3af;
     text-transform: uppercase;
@@ -84,48 +73,115 @@
     margin-bottom: 5px;
   }
 
-  input[type="text"],
-  input[type="password"],
-  select,
-  textarea {
+  input[type="text"], select {
     width: 100%;
-    padding: 9px 11px;
-    border: 1px solid #ddd;
+    padding: 8px 10px;
+    border: 1px solid #e2e0d8;
     border-radius: 7px;
     font-size: 13px;
     font-family: inherit;
     color: #1a1a1a;
     background: #fafaf8;
-    transition: border-color 0.15s, background 0.15s;
+    transition: border-color 0.15s;
     appearance: none;
   }
 
-  input:focus, select:focus, textarea:focus {
+  input:focus, select:focus {
     outline: none;
     border-color: #9ca3af;
     background: #fff;
   }
 
-  textarea {
-    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
-    font-size: 12.5px;
-    line-height: 1.6;
-    resize: vertical;
+  input::placeholder { color: #c4c2bb; }
+
+  .courses-header {
+    display: grid;
+    grid-template-columns: 2fr 1.2fr 1.6fr 36px;
+    gap: 8px;
+    margin-bottom: 6px;
+    padding: 0 2px;
   }
 
-  .api-row {
-    display: flex;
+  .courses-header span {
+    font-size: 11px;
+    font-weight: 500;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .course-row {
+    display: grid;
+    grid-template-columns: 2fr 1.2fr 1.6fr 36px;
     gap: 8px;
+    margin-bottom: 8px;
     align-items: center;
   }
 
-  .api-row input { flex: 1; }
+  .course-row input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #e2e0d8;
+    border-radius: 7px;
+    font-size: 13px;
+    font-family: inherit;
+    color: #1a1a1a;
+    background: #fafaf8;
+    transition: border-color 0.15s;
+  }
 
-  .btn {
+  .course-row input:focus {
+    outline: none;
+    border-color: #9ca3af;
+    background: #fff;
+  }
+
+  .course-row input::placeholder { color: #c4c2bb; }
+
+  .remove-btn {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #e2e0d8;
+    border-radius: 6px;
+    background: #fff;
+    color: #9ca3af;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.12s;
+    flex-shrink: 0;
+  }
+  .remove-btn:hover { background: #fef2f2; border-color: #fca5a5; color: #dc2626; }
+
+  .add-btn {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 9px 20px;
+    margin-top: 4px;
+    padding: 7px 14px;
+    border: 1px dashed #d1d5db;
+    border-radius: 7px;
+    background: transparent;
+    color: #6b7280;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .add-btn:hover { border-color: #9ca3af; color: #374151; background: #f9fafb; }
+
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .btn {
+    padding: 9px 22px;
     border-radius: 7px;
     font-size: 13px;
     font-weight: 500;
@@ -133,44 +189,24 @@
     border: 1px solid #d1d5db;
     background: #fff;
     color: #1a1a1a;
-    transition: background 0.12s, border-color 0.12s;
-    white-space: nowrap;
+    transition: all 0.12s;
   }
-
   .btn:hover { background: #f4f3ef; border-color: #9ca3af; }
   .btn:active { transform: scale(0.98); }
-  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
-  .btn-primary {
-    background: #1a1a1a;
-    color: #fff;
-    border-color: #1a1a1a;
-  }
+  .btn-primary { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
   .btn-primary:hover { background: #333; border-color: #333; }
+  .btn-sm { padding: 5px 12px; font-size: 12px; }
 
-  .btn-sm {
-    padding: 5px 12px;
-    font-size: 12px;
-  }
+  #statusMsg { font-size: 13px; color: #6b7280; }
 
-  .btn-row {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    flex-wrap: wrap;
-    margin-top: 14px;
-  }
-
-  #statusMsg {
-    font-size: 13px;
-    color: #6b7280;
-  }
+  .result-section { display: none; }
 
   .output-block {
     border: 1px solid #e2e0d8;
     border-radius: 10px;
     overflow: hidden;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
   }
 
   .output-header {
@@ -182,84 +218,42 @@
     border-bottom: 1px solid #e2e0d8;
   }
 
-  .output-label {
-    font-size: 12px;
-    font-weight: 600;
-    color: #6b7280;
-  }
-
-  .output-hint {
-    font-size: 11px;
-    color: #9ca3af;
-    margin-top: 2px;
-  }
+  .output-label { font-size: 12px; font-weight: 600; color: #374151; }
+  .output-hint { font-size: 11px; color: #9ca3af; margin-top: 1px; }
 
   .output-block textarea {
+    width: 100%;
+    height: 130px;
+    padding: 12px 14px;
     border: none;
-    border-radius: 0;
     background: #fff;
-    height: 140px;
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     font-size: 12.5px;
+    line-height: 1.7;
+    color: #1a1a1a;
     resize: vertical;
   }
+  .output-block textarea:focus { outline: none; }
 
-  .output-block textarea:focus {
-    border: none;
-    outline: none;
-    background: #fff;
-  }
+  .hint { font-size: 11.5px; color: #9ca3af; margin-top: 8px; line-height: 1.5; }
 
   .error-box {
-    padding: 12px 16px;
+    padding: 11px 16px;
     background: #fef2f2;
     border: 1px solid #fecaca;
     border-radius: 8px;
     font-size: 13px;
     color: #dc2626;
-    margin-top: 12px;
+    margin-bottom: 12px;
     display: none;
   }
 
-  .hint {
-    font-size: 11.5px;
-    color: #9ca3af;
+  .days-hint {
+    font-size: 11px;
+    color: #b0aea8;
     margin-top: 10px;
-    line-height: 1.5;
+    line-height: 1.6;
   }
-
-  .api-hint {
-    font-size: 11.5px;
-    color: #9ca3af;
-    margin-top: 5px;
-    line-height: 1.5;
-  }
-
-  .result-section { display: none; }
-
-  .badge {
-    display: inline-block;
-    font-size: 10.5px;
-    padding: 2px 8px;
-    border-radius: 20px;
-    background: #dcfce7;
-    color: #166534;
-    font-weight: 500;
-    vertical-align: middle;
-    margin-left: 6px;
-  }
-
-  .spinner {
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    border: 2px solid #d1d5db;
-    border-top-color: #6b7280;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    vertical-align: middle;
-  }
-
-  @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
@@ -270,30 +264,22 @@
 
 <div class="main">
 
-  <!-- API Key -->
   <div class="card">
-    <div class="card-title">API Key <span class="badge">saved in browser only</span></div>
-    <div class="api-row">
-      <input type="password" id="apiKey" placeholder="sk-ant-api03-..." autocomplete="off">
-      <button class="btn" onclick="toggleKey()">Show</button>
-    </div>
-    <p class="api-hint">Your Anthropic API key. Stored only in your browser's localStorage — never sent anywhere except directly to Anthropic.</p>
-  </div>
-
-  <!-- Intake fields -->
-  <div class="card">
-    <div class="card-title">Schedule details</div>
-
+    <div class="card-title">Student &amp; session</div>
     <div class="fields-row">
-      <div>
+      <div class="field">
         <label>Client</label>
         <input type="text" id="clientName" placeholder="e.g. UNLV">
       </div>
-      <div>
+      <div class="field">
+        <label>Student first name</label>
+        <input type="text" id="studentName" placeholder="e.g. Lex">
+      </div>
+      <div class="field">
         <label>Term</label>
         <input type="text" id="termName" placeholder="e.g. SP 26">
       </div>
-      <div>
+      <div class="field">
         <label>Source time zone</label>
         <select id="sourceTz">
           <option value="3">Eastern (ET)</option>
@@ -305,30 +291,42 @@
         </select>
       </div>
     </div>
-
-    <div>
-      <label>Paste raw schedule</label>
-      <textarea id="rawInput" rows="7" placeholder="Paste anything — email body, PDF text, spreadsheet export, screenshot OCR..."></textarea>
-    </div>
-
-    <div class="btn-row">
-      <button class="btn btn-primary" id="parseBtn" onclick="runParse()">Parse schedule</button>
-      <button class="btn" onclick="clearAll()">Clear</button>
-      <span id="statusMsg"></span>
-    </div>
   </div>
 
-  <!-- Error -->
+  <div class="card">
+    <div class="card-title">Courses</div>
+
+    <div class="courses-header">
+      <span>Course code</span>
+      <span>Days</span>
+      <span>Time</span>
+      <span></span>
+    </div>
+
+    <div id="courseRows"></div>
+
+    <button class="add-btn" onclick="addRow()">+ Add course</button>
+
+    <p class="days-hint">
+      Days: M &nbsp;T &nbsp;W &nbsp;Th &nbsp;F &nbsp;Sa &nbsp;Su &mdash; combine as needed: MW, TTh, MWF, MTWTh
+    </p>
+  </div>
+
   <div class="error-box" id="errorArea"></div>
 
-  <!-- Results -->
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="generate()">Generate outputs</button>
+    <button class="btn" onclick="clearAll()">Clear all</button>
+    <span id="statusMsg"></span>
+  </div>
+
   <div class="result-section" id="resultSection">
 
     <div class="output-block">
       <div class="output-header">
         <div>
           <div class="output-label">Master class list rows</div>
-          <div class="output-hint">Tab-separated: Client / User / Term / Job — paste directly into the sheet</div>
+          <div class="output-hint">Tab-separated: Client / User / Term / Job &mdash; paste directly into the Google Sheet</div>
         </div>
         <button class="btn btn-sm" onclick="copyOut('masterOut')">Copy</button>
       </div>
@@ -338,42 +336,55 @@
     <div class="output-block">
       <div class="output-header">
         <div>
-          <div class="output-label">WhenIWork job site names + times</div>
-          <div class="output-hint">Firstname - COURSE (Days) &nbsp;&nbsp; start-end time (PT)</div>
+          <div class="output-label">WhenIWork job site names</div>
+          <div class="output-hint">Firstname - COURSE (Days) &nbsp;&nbsp; start-end time</div>
         </div>
         <button class="btn btn-sm" onclick="copyOut('wiwOut')">Copy</button>
       </div>
       <textarea id="wiwOut" readonly></textarea>
     </div>
 
-    <p class="hint">Transcript destination column is left blank — add Drive links manually after pasting into the sheet.</p>
+    <p class="hint">Transcript destination column is left blank &mdash; add Drive links manually after pasting into the sheet.</p>
 
   </div>
 
 </div>
 
 <script>
-// ── Local storage for API key ──────────────────────────────────────────────
-window.addEventListener('DOMContentLoaded', () => {
-  const saved = localStorage.getItem('itx_api_key');
-  if (saved) document.getElementById('apiKey').value = saved;
-});
+let rowCount = 0;
 
-function toggleKey() {
-  const el = document.getElementById('apiKey');
-  el.type = el.type === 'password' ? 'text' : 'password';
+function addRow(code, days, time) {
+  rowCount++;
+  const id = rowCount;
+  const div = document.createElement('div');
+  div.className = 'course-row';
+  div.id = 'row-' + id;
+  div.innerHTML =
+    '<input type="text" placeholder="FILM 300.1001" data-field="code" value="' + esc(code || '') + '">' +
+    '<input type="text" placeholder="MW" data-field="days" value="' + esc(days || '') + '">' +
+    '<input type="text" placeholder="10:00am-12:45pm" data-field="time" value="' + esc(time || '') + '">' +
+    '<button class="remove-btn" onclick="removeRow(' + id + ')" title="Remove row">&times;</button>';
+  document.getElementById('courseRows').appendChild(div);
 }
 
-// ── Time zone conversion ───────────────────────────────────────────────────
+function removeRow(id) {
+  const el = document.getElementById('row-' + id);
+  if (el) el.remove();
+}
+
+function esc(str) {
+  return (str || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+}
+
 function toMin(h, m, ap) {
-  let hrs = h;
-  if (ap && ap.toLowerCase() === 'pm' && h !== 12) hrs += 12;
-  if (ap && ap.toLowerCase() === 'am' && h === 12) hrs = 0;
-  return hrs * 60 + m;
+  let hrs = +h;
+  if (ap && ap.toLowerCase() === 'pm' && hrs !== 12) hrs += 12;
+  if (ap && ap.toLowerCase() === 'am' && hrs === 12) hrs = 0;
+  return hrs * 60 + (+m || 0);
 }
 
 function fmtMin(total) {
-  let m = ((total % (24 * 60)) + 24 * 60) % (24 * 60);
+  let m = ((total % 1440) + 1440) % 1440;
   const h = Math.floor(m / 60), mn = m % 60;
   const ap = h < 12 ? 'am' : 'pm';
   const dh = h % 12 === 0 ? 12 : h % 12;
@@ -381,124 +392,94 @@ function fmtMin(total) {
 }
 
 function convertRange(rangeStr, offsetHours) {
-  const rx = /(\d{1,2}):?(\d{2})?\s*(am|pm)?\s*[-–]\s*(\d{1,2}):?(\d{2})?\s*(am|pm)/i;
+  if (!offsetHours) return rangeStr;
+  const rx = /(\d{1,2}):?(\d{2})?\s*(am|pm)?\s*[-\u2013]\s*(\d{1,2}):?(\d{2})?\s*(am|pm)/i;
   const m = rx.exec(rangeStr);
   if (!m) return rangeStr;
-  const start = toMin(+m[1], +(m[2] || 0), m[3] || m[6]) - offsetHours * 60;
-  const end   = toMin(+m[4], +(m[5] || 0), m[6])           - offsetHours * 60;
+  const start = toMin(m[1], m[2], m[3] || m[6]) - offsetHours * 60;
+  const end   = toMin(m[4], m[5], m[6])          - offsetHours * 60;
   return fmtMin(start) + '-' + fmtMin(end);
 }
 
-// ── Main parse function ────────────────────────────────────────────────────
-async function runParse() {
-  const apiKey = document.getElementById('apiKey').value.trim();
-  const raw    = document.getElementById('rawInput').value.trim();
-  const client = document.getElementById('clientName').value.trim() || '[Client]';
-  const term   = document.getElementById('termName').value.trim()   || '[Term]';
-  const offset = parseInt(document.getElementById('sourceTz').value);
+function getCourses() {
+  const rows = document.querySelectorAll('#courseRows .course-row');
+  const out = [];
+  rows.forEach(function(row) {
+    const inputs = row.querySelectorAll('input');
+    const code = inputs[0].value.trim();
+    const days = inputs[1].value.trim();
+    const time = inputs[2].value.trim();
+    if (code) out.push({ code: code, days: days, time: time });
+  });
+  return out;
+}
 
+function generate() {
   document.getElementById('errorArea').style.display = 'none';
   document.getElementById('resultSection').style.display = 'none';
 
-  if (!apiKey) { showError('Add your Anthropic API key at the top first.'); return; }
-  if (!raw)    { showError('Paste a schedule to parse.'); return; }
+  var client  = document.getElementById('clientName').value.trim();
+  var student = document.getElementById('studentName').value.trim();
+  var term    = document.getElementById('termName').value.trim();
+  var offset  = parseInt(document.getElementById('sourceTz').value);
+  var courses = getCourses();
 
-  localStorage.setItem('itx_api_key', apiKey);
+  if (!client)         { showError('Enter a client name.'); return; }
+  if (!student)        { showError('Enter the student\'s first name.'); return; }
+  if (!term)           { showError('Enter the term (e.g. SP 26).'); return; }
+  if (!courses.length) { showError('Add at least one course.'); return; }
 
-  const btn = document.getElementById('parseBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> Parsing...';
-  setStatus('');
+  var masterLines = courses.map(function(c) {
+    return [client, student, term, c.code].join('\t');
+  });
 
-  const systemPrompt = `You parse student class schedules for Intellitext, a transcription services company. Extract every course and return ONLY a JSON array. No preamble, no markdown fences, no explanation.
+  var wiwLines = courses.map(function(c) {
+    var timeOut = c.time ? convertRange(c.time, offset) : '';
+    var daysPart = c.days ? ' (' + c.days + ')' : '';
+    var name = student + ' - ' + c.code + daysPart;
+    var tzLabel = (offset !== 0 && timeOut) ? ' PT' : '';
+    return timeOut ? name + '    ' + timeOut + tzLabel : name;
+  });
 
-Each object must have exactly these keys:
-- "student_first": student's first name only. If a full name appears at the top, use just the first name for all rows.
-- "course_code": the course code exactly as written (e.g. "FILM 300.1001", "MATH 251.105"). If no code exists, use the course name.
-- "days": abbreviate days the class meets: M T W Th F Sa Su — combined e.g. "MW", "TTh", "MWF". Empty string if unknown.
-- "time": the time range exactly as it appears in the source text (e.g. "6:00-9:00pm", "10:00-12:45pm"). Empty string if not found.
+  document.getElementById('masterOut').value = masterLines.join('\n');
+  document.getElementById('wiwOut').value = wiwLines.join('\n');
+  document.getElementById('resultSection').style.display = 'block';
+  document.getElementById('statusMsg').textContent =
+    courses.length + ' course' + (courses.length !== 1 ? 's' : '') + ' processed';
 
-Rules:
-- One object per course. Three courses = three objects.
-- Carry the student name across all objects if it only appears once.
-- Return ONLY the raw JSON array.`;
-
-  try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 1000,
-        system: systemPrompt,
-        messages: [{ role: 'user', content: raw }]
-      })
-    });
-
-    const data = await resp.json();
-    if (data.error) throw new Error(data.error.message);
-
-    const text = data.content.map(b => b.text || '').join('').trim().replace(/```json|```/g, '').trim();
-    const rows = JSON.parse(text);
-    if (!Array.isArray(rows) || rows.length === 0) throw new Error('No courses detected. Try rephrasing or cleaning up the pasted text.');
-
-    // Build outputs
-    const masterLines = rows.map(r =>
-      [client, r.student_first || 'Student', term, r.course_code || ''].join('\t')
-    );
-
-    const wiwLines = rows.map(r => {
-      const timeConverted = r.time ? convertRange(r.time, offset) : '';
-      const days = r.days ? `(${r.days})` : '';
-      const name = `${r.student_first || 'Student'} - ${r.course_code} ${days}`.trim();
-      return timeConverted ? `${name}    ${timeConverted} PT` : name;
-    });
-
-    document.getElementById('masterOut').value = masterLines.join('\n');
-    document.getElementById('wiwOut').value = wiwLines.join('\n');
-    document.getElementById('resultSection').style.display = 'block';
-    setStatus(`${rows.length} course${rows.length !== 1 ? 's' : ''} extracted`);
-
-  } catch(e) {
-    showError(e.message || 'Something went wrong. Check your API key and try again.');
-  }
-
-  btn.disabled = false;
-  btn.innerHTML = 'Parse schedule';
+  document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// ── Helpers ────────────────────────────────────────────────────────────────
 function copyOut(id) {
-  const el = document.getElementById(id);
-  navigator.clipboard.writeText(el.value).then(() => setStatus('Copied to clipboard'));
+  var el = document.getElementById(id);
+  navigator.clipboard.writeText(el.value).then(function() {
+    document.getElementById('statusMsg').textContent = 'Copied to clipboard';
+    setTimeout(function() {
+      document.getElementById('statusMsg').textContent = '';
+    }, 2000);
+  });
 }
 
 function clearAll() {
-  ['rawInput', 'masterOut', 'wiwOut'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
   document.getElementById('clientName').value = '';
+  document.getElementById('studentName').value = '';
   document.getElementById('termName').value = '';
+  document.getElementById('sourceTz').value = '0';
+  document.getElementById('courseRows').innerHTML = '';
+  rowCount = 0;
+  addRow(); addRow(); addRow();
   document.getElementById('resultSection').style.display = 'none';
   document.getElementById('errorArea').style.display = 'none';
-  setStatus('');
+  document.getElementById('statusMsg').textContent = '';
 }
 
 function showError(msg) {
-  const el = document.getElementById('errorArea');
+  var el = document.getElementById('errorArea');
   el.textContent = msg;
   el.style.display = 'block';
 }
 
-function setStatus(msg) {
-  document.getElementById('statusMsg').textContent = msg;
-}
+addRow(); addRow(); addRow();
 </script>
 
 </body>

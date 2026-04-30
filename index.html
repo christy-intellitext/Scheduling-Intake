@@ -452,6 +452,17 @@ NURS 419.1002, TTh, 1-2:15pm</div>
       <textarea id="wiwOut" readonly></textarea>
     </div>
 
+    <div class="output-block">
+      <div class="output-header">
+        <div>
+          <div class="output-label">Time reference</div>
+          <div class="output-hint">Job site name paired with time &mdash; for reference while entering manually</div>
+        </div>
+        <button class="btn btn-sm" onclick="copyOut('timeOut')">Copy</button>
+      </div>
+      <textarea id="timeOut" readonly></textarea>
+    </div>
+
     <p class="hint">Transcript destination column left blank &mdash; add Drive links manually after pasting into the sheet.</p>
 
   </div>
@@ -653,7 +664,7 @@ function generate() {
   if (!term)           { showError('Enter the term (e.g. SP 26).'); return; }
   if (!courses.length) { showError('Add at least one course.'); return; }
 
-  var masterLines = [], wiwLines = [];
+  var masterLines = [], wiwLines = [], timeLines = [];
 
   courses.forEach(function(c) {
     var daysPart = c.days ? ' (' + c.days + ')' : '';
@@ -664,12 +675,14 @@ function generate() {
     if (c.teamType === 'solo') {
       masterLines.push([client, student, term, c.code].join('\t'));
       var name = base + buildSuffix('', c.loc);
-      wiwLines.push(timeConverted ? name + '    ' + timeConverted + tzLabel : name);
+      wiwLines.push(name);
+      timeLines.push(timeConverted ? name + '    ' + timeConverted + tzLabel : name);
 
     } else if (c.teamType === 'team') {
       masterLines.push([client, student, term, c.code].join('\t'));
       var name = base + buildSuffix('Teamed', c.loc);
-      wiwLines.push(timeConverted ? name + '    ' + timeConverted + tzLabel : name);
+      wiwLines.push(name);
+      timeLines.push(timeConverted ? name + '    ' + timeConverted + tzLabel : name);
 
     } else if (c.teamType === 'seq') {
       var n = c.parts || 2;
@@ -678,13 +691,15 @@ function generate() {
         masterLines.push([client, student, term, c.code].join('\t'));
         var name = base + buildSuffix('Sequential team ' + i + '/' + n, c.loc);
         var t = slices[i-1] || timeConverted;
-        wiwLines.push(t ? name + '    ' + t + tzLabel : name);
+        wiwLines.push(name);
+        timeLines.push(t ? name + '    ' + t + tzLabel : name);
       }
     }
   });
 
   document.getElementById('masterOut').value = masterLines.join('\n');
   document.getElementById('wiwOut').value = wiwLines.join('\n');
+  document.getElementById('timeOut').value = timeLines.join('\n');
   document.getElementById('resultSection').style.display = 'block';
   setStatus(courses.length + ' course' + (courses.length!==1?'s':'') + ' processed');
   document.getElementById('resultSection').scrollIntoView({ behavior:'smooth', block:'start' });
@@ -722,6 +737,10 @@ function esc(str) {
   return (str||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 </script>
+
+<div style="text-align:center; margin-top:32px; font-family:'Comfortaa',sans-serif; font-size:11px; color:#7a9a8a; letter-spacing:0.04em;">
+  Authorized Use Only &mdash; Intellitext LLC 2026 &mdash; V 1.2
+</div>
 
 </body>
 </html>

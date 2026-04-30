@@ -382,19 +382,19 @@
     <div class="section-label">Courses</div>
 
     <div class="field" style="margin-bottom:10px;">
-      <label>Paste course block &mdash; one per line: Course code, Days, Start-End time</label>
+      <label>Paste course block &mdash; one per line: Course code&nbsp;&nbsp;Days&nbsp;&nbsp;Start-End time</label>
       <div class="paste-row">
-        <textarea id="pasteBlock" placeholder="FILM 300.1001, W, 6:00-9:00pm&#10;FILM 315.1001, T, 10:00-12:45pm&#10;FILM 417.1002, W, 10:00-12:45pm"></textarea>
+        <textarea id="pasteBlock" placeholder="FILM 300.1001 W 6:00-9:00pm&#10;FILM 315.1001 T 10:00-12:45pm&#10;FILM 417.1002 W 10:00-12:45pm"></textarea>
         <div class="paste-actions">
           <button class="btn" onclick="importPaste()">Import &darr;</button>
           <button class="btn" onclick="document.getElementById('pasteBlock').value=''" style="font-size:12px;opacity:0.7;">Clear</button>
         </div>
       </div>
       <div class="format-hint">
-        Format: <span style="font-family:'Courier New',monospace;font-size:11.5px;background:#b5c0bb;padding:1px 5px;border-radius:4px;color:#1a1a1a;">Course code, Days, Start-End time</span>
-        <div class="example">FILM 300.1001, W, 6:00-9:00pm
-MATH 251.105, MWF, 9-9:50am
-NURS 419.1002, TTh, 1-2:15pm</div>
+        Format: <span style="font-family:'Courier New',monospace;font-size:11.5px;background:#b5c0bb;padding:1px 5px;border-radius:4px;color:#1a1a1a;">Course code&nbsp; Days&nbsp; Start-End time</span>
+        <div class="example">FILM 300.1001 W 6:00-9:00pm
+MATH 251.105 MWF 9-9:50am
+NURS 419.1002 TTh 1-2:15pm</div>
       </div>
     </div>
 
@@ -537,14 +537,47 @@ function onTeamChange(id) {
   }
 }
 
+function parsePasteLine(line) {
+  // Match a time range anywhere in the line: digits, optional colon+mins, am/pm variants, dash, end time
+  var timeRx = /\d{1,2}(?::\d{2})?\s*(?:am?|pm?)\s*[-\u2013]\s*\d{1,2}(?::\d{2})?\s*(?:am?|pm?)/i;
+  var timeMatch = line.match(timeRx);
+  var time = timeMatch ? timeMatch[0].trim() : '';
+  var rest = timeMatch ? line.slice(0, timeMatch.index).trim() : line.trim();
+
+  // Match days: one or more of M,T,W,Th,F,Sa,Su (case-insensitive, various combos)
+  // Days appear as a standalone token -- all caps short word(s) after the course code
+  var daysRx = /\b((?:M(?:on)?|T(?:ue)?(?:s)?|W(?:ed)?|Th(?:u)?(?:r)?(?:s)?|F(?:ri)?|Sa(?:t)?|Su(?:n)?)+)\b/i;
+  // Find last occurrence to avoid matching part of course code
+  var daysMatch = null;
+  var dm;
+  var testRx = new RegExp(daysRx.source, 'gi');
+  while ((dm = testRx.exec(rest)) !== null) { daysMatch = dm; }
+
+  var days = '';
+  var code = rest;
+  if (daysMatch) {
+    days = daysMatch[0].trim();
+    code = (rest.slice(0, daysMatch.index) + rest.slice(daysMatch.index + daysMatch[0].length)).trim();
+  }
+
+  return { code: code, days: days, time: time };
+}
+
 function importPaste() {
   var raw = document.getElementById('pasteBlock').value.trim();
   if (!raw) return;
   var lines = raw.split('\n').map(function(l){ return l.trim(); }).filter(Boolean);
   var added = 0;
   lines.forEach(function(line) {
-    var parts = line.split(',').map(function(p){ return p.trim(); });
-    if (parts[0]) { addRow(parts[0], parts[1]||'', parts[2]||''); added++; }
+    // Support comma-separated (legacy) OR space-separated (new)
+    var parsed;
+    if (line.indexOf(',') !== -1) {
+      var parts = line.split(',').map(function(p){ return p.trim(); });
+      parsed = { code: parts[0]||'', days: parts[1]||'', time: parts[2]||'' };
+    } else {
+      parsed = parsePasteLine(line);
+    }
+    if (parsed.code) { addRow(parsed.code, parsed.days, parsed.time); added++; }
   });
   if (added) {
     document.getElementById('pasteBlock').value = '';
@@ -739,7 +772,7 @@ function esc(str) {
 </script>
 
 <div style="text-align:center; margin-top:32px; font-family:'Comfortaa',sans-serif; font-size:11px; color:#7a9a8a; letter-spacing:0.04em;">
-  Authorized Use Only &mdash; Intellitext LLC 2026 &mdash; V 1.2
+  Authorized Use Only &mdash; Intellitext LLC 2026 &mdash; V 1.3
 </div>
 
 </body>

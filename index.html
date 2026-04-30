@@ -31,7 +31,7 @@
   .logo span { color: #9ca3af; font-weight: 400; }
 
   .main {
-    max-width: 860px;
+    max-width: 1060px;
     margin: 0 auto;
     padding: 28px 20px 80px;
   }
@@ -59,9 +59,7 @@
     gap: 12px;
   }
 
-  @media (max-width: 640px) {
-    .fields-row { grid-template-columns: 1fr 1fr; }
-  }
+  @media (max-width: 640px) { .fields-row { grid-template-columns: 1fr 1fr; } }
 
   .field label {
     display: block;
@@ -73,7 +71,7 @@
     margin-bottom: 5px;
   }
 
-  input[type="text"], select, textarea {
+  input[type="text"], input[type="number"], select, textarea {
     width: 100%;
     padding: 8px 10px;
     border: 1px solid #e2e0d8;
@@ -99,37 +97,136 @@
     font-size: 13px;
     line-height: 1.7;
     resize: vertical;
-    height: 140px;
+    height: 130px;
   }
+
+  /* Paste area */
+  .paste-row { display: flex; gap: 10px; align-items: flex-start; }
+  .paste-row textarea { flex: 1; }
+  .paste-actions { display: flex; flex-direction: column; gap: 8px; padding-top: 2px; }
 
   .format-hint {
     margin-top: 10px;
-    padding: 12px 14px;
+    padding: 11px 14px;
     background: #f4f3ef;
     border-radius: 7px;
     font-size: 12px;
     color: #6b7280;
     line-height: 1.7;
   }
-
-  .format-hint code {
-    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
-    font-size: 11.5px;
-    color: #374151;
-    background: #e8e6e0;
-    padding: 1px 5px;
-    border-radius: 4px;
-  }
-
   .format-hint .example {
-    margin-top: 8px;
+    margin-top: 6px;
     font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     font-size: 11.5px;
     color: #374151;
     white-space: pre;
-    line-height: 1.8;
+    line-height: 1.9;
   }
 
+  /* Course table */
+  .course-table-wrap { overflow-x: auto; margin-top: 4px; }
+
+  .course-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+    min-width: 820px;
+  }
+
+  .course-table thead th {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0 6px 8px;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .course-table tbody tr { vertical-align: middle; }
+  .course-table tbody td { padding: 4px 5px; }
+
+  .course-table input[type="text"],
+  .course-table input[type="number"],
+  .course-table select {
+    padding: 7px 8px;
+    font-size: 12px;
+  }
+
+  /* Toggle pill buttons */
+  .toggle-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+  }
+
+  .toggle-group input[type="radio"],
+  .toggle-group input[type="checkbox"] { display: none; }
+
+  .toggle-group label {
+    display: inline-block;
+    padding: 4px 9px;
+    font-size: 11px;
+    font-weight: 500;
+    border: 1px solid #e2e0d8;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #9ca3af;
+    background: #fafaf8;
+    transition: all 0.12s;
+    text-transform: none;
+    letter-spacing: 0;
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  .toggle-group input[type="radio"]:checked + label,
+  .toggle-group input[type="checkbox"]:checked + label {
+    background: #1a1a1a;
+    color: #fff;
+    border-color: #1a1a1a;
+  }
+
+  .parts-wrap { display: flex; align-items: center; gap: 4px; }
+  .parts-wrap input[type="number"] { width: 52px; opacity: 0.3; pointer-events: none; transition: opacity 0.15s; }
+  .parts-wrap input[type="number"].active { opacity: 1; pointer-events: auto; }
+  .parts-wrap span { font-size: 11px; color: #9ca3af; }
+
+  .remove-btn {
+    width: 28px; height: 28px;
+    border: 1px solid #e2e0d8;
+    border-radius: 5px;
+    background: #fff;
+    color: #9ca3af;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.12s;
+  }
+  .remove-btn:hover { background: #fef2f2; border-color: #fca5a5; color: #dc2626; }
+
+  .add-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 12px;
+    padding: 7px 14px;
+    border: 1px dashed #d1d5db;
+    border-radius: 7px;
+    background: transparent;
+    color: #6b7280;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .add-btn:hover { border-color: #9ca3af; color: #374151; background: #f9fafb; }
+
+  .divider { border: none; border-top: 1px solid #e2e0d8; margin: 16px 0; }
+
+  /* Buttons */
   .btn-row {
     display: flex;
     gap: 10px;
@@ -148,16 +245,17 @@
     background: #fff;
     color: #1a1a1a;
     transition: all 0.12s;
+    white-space: nowrap;
   }
   .btn:hover { background: #f4f3ef; border-color: #9ca3af; }
   .btn:active { transform: scale(0.98); }
-
   .btn-primary { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
   .btn-primary:hover { background: #333; border-color: #333; }
   .btn-sm { padding: 5px 12px; font-size: 12px; }
 
   #statusMsg { font-size: 13px; color: #6b7280; }
 
+  /* Output */
   .result-section { display: none; }
 
   .output-block {
@@ -183,45 +281,11 @@
     border: none;
     border-radius: 0;
     background: #fff;
-    height: 140px;
+    height: 160px;
     resize: vertical;
-  }
-  .output-block textarea:focus { border: none; outline: none; background: #fff; }
-
-  .parsed-preview {
-    border-top: 1px solid #e2e0d8;
-  }
-
-  .parsed-preview table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 12.5px;
-  }
-
-  .parsed-preview th {
-    padding: 8px 12px;
-    text-align: left;
-    font-size: 11px;
-    font-weight: 600;
-    color: #9ca3af;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    background: #f9f8f6;
-    border-bottom: 1px solid #e2e0d8;
-  }
-
-  .parsed-preview td {
-    padding: 9px 12px;
-    border-bottom: 1px solid #f0ede8;
-    color: #1a1a1a;
-    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     font-size: 12px;
   }
-
-  .parsed-preview tr:last-child td { border-bottom: none; }
-  .parsed-preview tr:nth-child(even) td { background: #fafaf8; }
-
-  .warn { color: #d97706; }
+  .output-block textarea:focus { outline: none; }
 
   .error-box {
     padding: 11px 16px;
@@ -235,6 +299,15 @@
   }
 
   .hint { font-size: 11.5px; color: #9ca3af; margin-top: 8px; line-height: 1.5; }
+
+  /* Col widths */
+  .col-code  { min-width: 140px; width: 16%; }
+  .col-days  { min-width: 70px;  width: 8%; }
+  .col-time  { min-width: 130px; width: 14%; }
+  .col-team  { min-width: 185px; width: 20%; }
+  .col-parts { min-width: 80px;  width: 9%; }
+  .col-loc   { min-width: 250px; width: 29%; }
+  .col-del   { min-width: 34px;  width: 4%; }
 </style>
 </head>
 <body>
@@ -245,7 +318,7 @@
 
 <div class="main">
 
-  <!-- Student info -->
+  <!-- Student & session -->
   <div class="card">
     <div class="card-title">Student &amp; session</div>
     <div class="fields-row">
@@ -275,22 +348,46 @@
     </div>
   </div>
 
-  <!-- Course paste -->
+  <!-- Courses -->
   <div class="card">
-    <div class="card-title">Course schedule</div>
+    <div class="card-title">Courses</div>
 
-    <div class="field">
-      <label>Paste course info &mdash; one course per line</label>
-      <textarea id="courseBlock" placeholder="FILM 300.1001, W, 6:00-9:00pm&#10;FILM 315.1001, T, 10:00-12:45pm&#10;FILM 417.1002, W, 10:00-12:45pm"></textarea>
+    <div class="field" style="margin-bottom:10px;">
+      <label>Paste course block &mdash; one per line: Course code, Days, Start-End time</label>
+      <div class="paste-row">
+        <textarea id="pasteBlock" placeholder="FILM 300.1001, W, 6:00-9:00pm&#10;FILM 315.1001, T, 10:00-12:45pm&#10;FILM 417.1002, W, 10:00-12:45pm"></textarea>
+        <div class="paste-actions">
+          <button class="btn" onclick="importPaste()">Import &darr;</button>
+          <button class="btn" onclick="document.getElementById('pasteBlock').value=''" style="font-size:12px;opacity:0.6;">Clear</button>
+        </div>
+      </div>
+      <div class="format-hint">
+        Format: <span style="font-family:monospace;font-size:11.5px;background:#e8e6e0;padding:1px 5px;border-radius:4px;">Course code, Days, Start-End time</span>
+        <div class="example">FILM 300.1001, W, 6:00-9:00pm
+MATH 251.105, MWF, 9:00-9:50am</div>
+      </div>
     </div>
 
-    <div class="format-hint">
-      <strong>Format:</strong> <code>Course code, Days, Start-End time</code> &mdash; one course per line, comma-separated.<br>
-      <div class="example">FILM 300.1001, W, 6:00-9:00pm
-MATH 251.105, MWF, 9:00-9:50am
-NURS 419.1002, TTh, 1:00-2:15pm</div>
-      Days: M &nbsp;T &nbsp;W &nbsp;Th &nbsp;F &nbsp;Sa &nbsp;Su &mdash; combine as needed (MW, TTh, MWF). Leave blank if unknown.
+    <hr class="divider">
+
+    <div class="course-table-wrap">
+      <table class="course-table">
+        <thead>
+          <tr>
+            <th class="col-code">Course code</th>
+            <th class="col-days">Days</th>
+            <th class="col-time">Time</th>
+            <th class="col-team">Shift type</th>
+            <th class="col-parts">Parts</th>
+            <th class="col-loc">Location / billing note</th>
+            <th class="col-del"></th>
+          </tr>
+        </thead>
+        <tbody id="courseBody"></tbody>
+      </table>
     </div>
+
+    <button class="add-btn" onclick="addRow()">+ Add course</button>
   </div>
 
   <div class="error-box" id="errorArea"></div>
@@ -301,32 +398,8 @@ NURS 419.1002, TTh, 1:00-2:15pm</div>
     <span id="statusMsg"></span>
   </div>
 
-  <!-- Results -->
   <div class="result-section" id="resultSection">
 
-    <!-- Preview table -->
-    <div class="card" style="padding:0; overflow:hidden;">
-      <div class="output-header" style="border-radius:0;">
-        <div class="output-label">Parsed preview</div>
-      </div>
-      <div class="parsed-preview">
-        <table>
-          <thead>
-            <tr>
-              <th>Client</th>
-              <th>Student</th>
-              <th>Term</th>
-              <th>Course</th>
-              <th>Days</th>
-              <th>Time (PT)</th>
-            </tr>
-          </thead>
-          <tbody id="previewBody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Master class list -->
     <div class="output-block">
       <div class="output-header">
         <div>
@@ -338,12 +411,11 @@ NURS 419.1002, TTh, 1:00-2:15pm</div>
       <textarea id="masterOut" readonly></textarea>
     </div>
 
-    <!-- WhenIWork -->
     <div class="output-block">
       <div class="output-header">
         <div>
           <div class="output-label">WhenIWork job site names</div>
-          <div class="output-hint">Firstname - COURSE (Days) &nbsp;&nbsp; start-end time</div>
+          <div class="output-hint">One entry per shift &mdash; includes team labels, location notes, and split times</div>
         </div>
         <button class="btn btn-sm" onclick="copyOut('wiwOut')">Copy</button>
       </div>
@@ -357,59 +429,163 @@ NURS 419.1002, TTh, 1:00-2:15pm</div>
 </div>
 
 <script>
-// ── Time conversion ────────────────────────────────────────────────────────
+var rowCount = 0;
+
+var LOCATION_OPTIONS = [
+  { value: '',         label: 'None' },
+  { value: 'Remote',   label: 'Remote' },
+  { value: 'Onsite',   label: 'Onsite' },
+  { value: 'Remote + 15 min billable transcript edit time', label: 'Remote +15' },
+  { value: 'Onsite + 15 min billable transcript edit time', label: 'Onsite +15' }
+];
+
+function addRow(code, days, time) {
+  rowCount++;
+  var id = rowCount;
+
+  // Build location radio options
+  var locHtml = '<div class="toggle-group">';
+  LOCATION_OPTIONS.forEach(function(opt, i) {
+    var rid = 'loc_' + id + '_' + i;
+    var checked = i === 0 ? 'checked' : '';
+    locHtml +=
+      '<input type="radio" name="loc_' + id + '" id="' + rid + '" value="' + esc(opt.value) + '" ' + checked + '>' +
+      '<label for="' + rid + '">' + esc(opt.label) + '</label>';
+  });
+  locHtml += '</div>';
+
+  var tr = document.createElement('tr');
+  tr.id = 'row-' + id;
+  tr.innerHTML =
+    '<td class="col-code"><input type="text" placeholder="FILM 300.1001" value="' + esc(code||'') + '"></td>' +
+    '<td class="col-days"><input type="text" placeholder="MW" value="' + esc(days||'') + '"></td>' +
+    '<td class="col-time"><input type="text" placeholder="6:00-9:00pm" value="' + esc(time||'') + '"></td>' +
+    '<td class="col-team">' +
+      '<div class="toggle-group">' +
+        '<input type="radio" name="team_' + id + '" id="solo_' + id + '" value="solo" checked onchange="onTeamChange(' + id + ')">' +
+        '<label for="solo_' + id + '">Solo</label>' +
+        '<input type="radio" name="team_' + id + '" id="team_' + id + '" value="team" onchange="onTeamChange(' + id + ')">' +
+        '<label for="team_' + id + '">Teamed</label>' +
+        '<input type="radio" name="team_' + id + '" id="seq_' + id + '" value="seq" onchange="onTeamChange(' + id + ')">' +
+        '<label for="seq_' + id + '">Sequential</label>' +
+      '</div>' +
+    '</td>' +
+    '<td class="col-parts">' +
+      '<div class="parts-wrap">' +
+        '<input type="number" id="parts_' + id + '" value="2" min="2" max="6">' +
+        '<span>parts</span>' +
+      '</div>' +
+    '</td>' +
+    '<td class="col-loc">' + locHtml + '</td>' +
+    '<td class="col-del"><button class="remove-btn" onclick="removeRow(' + id + ')">&times;</button></td>';
+
+  document.getElementById('courseBody').appendChild(tr);
+  onTeamChange(id);
+}
+
+function removeRow(id) {
+  var el = document.getElementById('row-' + id);
+  if (el) el.remove();
+}
+
+function onTeamChange(id) {
+  var sel = document.querySelector('input[name="team_' + id + '"]:checked');
+  var pi = document.getElementById('parts_' + id);
+  if (pi) {
+    if (sel && sel.value === 'seq') pi.classList.add('active');
+    else pi.classList.remove('active');
+  }
+}
+
+function importPaste() {
+  var raw = document.getElementById('pasteBlock').value.trim();
+  if (!raw) return;
+  var lines = raw.split('\n').map(function(l){ return l.trim(); }).filter(Boolean);
+  var added = 0;
+  lines.forEach(function(line) {
+    var parts = line.split(',').map(function(p){ return p.trim(); });
+    if (parts[0]) { addRow(parts[0], parts[1]||'', parts[2]||''); added++; }
+  });
+  if (added) {
+    document.getElementById('pasteBlock').value = '';
+    setStatus(added + ' course' + (added!==1?'s':'') + ' imported');
+  }
+}
+
+function getRows() {
+  var rows = document.querySelectorAll('#courseBody tr');
+  var out = [];
+  rows.forEach(function(tr) {
+    var id = tr.id.replace('row-','');
+    var inputs = tr.querySelectorAll('input[type="text"]');
+    var code = inputs[0] ? inputs[0].value.trim() : '';
+    var days = inputs[1] ? inputs[1].value.trim() : '';
+    var time = inputs[2] ? inputs[2].value.trim() : '';
+    var teamR = tr.querySelector('input[name="team_' + id + '"]:checked');
+    var teamType = teamR ? teamR.value : 'solo';
+    var pi = document.getElementById('parts_' + id);
+    var parts = pi ? (parseInt(pi.value)||2) : 2;
+    var locR = tr.querySelector('input[name="loc_' + id + '"]:checked');
+    var locVal = locR ? locR.value : '';
+    if (code) out.push({ code:code, days:days, time:time, teamType:teamType, parts:parts, loc:locVal });
+  });
+  return out;
+}
+
+// Time math
 function toMin(h, m, ap) {
   var hrs = +h;
-  if (ap && ap.toLowerCase() === 'pm' && hrs !== 12) hrs += 12;
-  if (ap && ap.toLowerCase() === 'am' && hrs === 12) hrs = 0;
-  return hrs * 60 + (+m || 0);
+  if (ap && ap.toLowerCase()==='pm' && hrs!==12) hrs+=12;
+  if (ap && ap.toLowerCase()==='am' && hrs===12) hrs=0;
+  return hrs*60+(+m||0);
 }
 
 function fmtMin(total) {
-  var m = ((total % 1440) + 1440) % 1440;
-  var h = Math.floor(m / 60), mn = m % 60;
-  var ap = h < 12 ? 'am' : 'pm';
-  var dh = h % 12 === 0 ? 12 : h % 12;
-  return dh + (mn ? ':' + String(mn).padStart(2, '0') : '') + ap;
+  var m = ((total%1440)+1440)%1440;
+  var h = Math.floor(m/60), mn = m%60;
+  var ap = h<12?'am':'pm';
+  var dh = h%12===0?12:h%12;
+  return dh+(mn?':'+String(mn).padStart(2,'0'):'')+ap;
 }
 
-function convertRange(rangeStr, offsetHours) {
-  if (!offsetHours) return rangeStr;
+function parseRange(str) {
   var rx = /(\d{1,2}):?(\d{2})?\s*(am|pm)?\s*[-\u2013]\s*(\d{1,2}):?(\d{2})?\s*(am|pm)/i;
-  var m = rx.exec(rangeStr);
-  if (!m) return rangeStr;
-  var start = toMin(m[1], m[2], m[3] || m[6]) - offsetHours * 60;
-  var end   = toMin(m[4], m[5], m[6])          - offsetHours * 60;
-  return fmtMin(start) + '-' + fmtMin(end);
+  var m = rx.exec(str);
+  if (!m) return null;
+  return { start: toMin(m[1],m[2],m[3]||m[6]), end: toMin(m[4],m[5],m[6]) };
 }
 
-// ── Parse course block ─────────────────────────────────────────────────────
-function parseCourseBlock(raw) {
-  var lines = raw.split('\n').map(function(l) { return l.trim(); }).filter(function(l) { return l.length > 0; });
-  var courses = [];
-  var errors = [];
-
-  lines.forEach(function(line, i) {
-    // Split on commas -- expect: code, days, time
-    // Be flexible: allow 2 or 3 parts (time optional)
-    var parts = line.split(',').map(function(p) { return p.trim(); });
-
-    if (parts.length < 1 || !parts[0]) {
-      errors.push('Line ' + (i + 1) + ': could not read course code');
-      return;
-    }
-
-    courses.push({
-      code: parts[0] || '',
-      days: parts[1] || '',
-      time: parts[2] || ''
-    });
-  });
-
-  return { courses: courses, errors: errors };
+function convertRange(str, off) {
+  if (!off) return str;
+  var r = parseRange(str);
+  if (!r) return str;
+  return fmtMin(r.start - off*60) + '-' + fmtMin(r.end - off*60);
 }
 
-// ── Generate ───────────────────────────────────────────────────────────────
+function splitTime(str, n, off) {
+  var r = parseRange(str);
+  if (!r) {
+    var c = convertRange(str, off);
+    var arr = [];
+    for (var i=0;i<n;i++) arr.push(c);
+    return arr;
+  }
+  var s = r.start - off*60, e = r.end - off*60;
+  var chunk = (e - s) / n;
+  var slices = [];
+  for (var i=0;i<n;i++) {
+    slices.push(fmtMin(s + Math.round(i*chunk)) + '-' + fmtMin(s + Math.round((i+1)*chunk)));
+  }
+  return slices;
+}
+
+function buildSuffix(teamLabel, locVal) {
+  var parts = [];
+  if (teamLabel) parts.push(teamLabel);
+  if (locVal)    parts.push(locVal);
+  return parts.length ? ' (' + parts.join(') (') + ')' : '';
+}
+
 function generate() {
   document.getElementById('errorArea').style.display = 'none';
   document.getElementById('resultSection').style.display = 'none';
@@ -418,84 +594,72 @@ function generate() {
   var student = document.getElementById('studentName').value.trim();
   var term    = document.getElementById('termName').value.trim();
   var offset  = parseInt(document.getElementById('sourceTz').value);
-  var raw     = document.getElementById('courseBlock').value.trim();
+  var courses = getRows();
 
-  if (!client)  { showError('Enter a client name.'); return; }
-  if (!student) { showError('Enter the student\'s first name.'); return; }
-  if (!term)    { showError('Enter the term (e.g. SP 26).'); return; }
-  if (!raw)     { showError('Paste course info into the schedule field.'); return; }
+  if (!client)         { showError('Enter a client name.'); return; }
+  if (!student)        { showError('Enter the student\'s first name.'); return; }
+  if (!term)           { showError('Enter the term (e.g. SP 26).'); return; }
+  if (!courses.length) { showError('Add at least one course.'); return; }
 
-  var result = parseCourseBlock(raw);
+  var masterLines = [], wiwLines = [];
 
-  if (result.errors.length) {
-    showError(result.errors.join(' | '));
-    return;
-  }
-
-  if (!result.courses.length) {
-    showError('No courses found. Check the format.');
-    return;
-  }
-
-  var courses = result.courses;
-
-  // Preview table
-  var tbody = document.getElementById('previewBody');
-  tbody.innerHTML = '';
   courses.forEach(function(c) {
-    var timeDisplay = c.time ? convertRange(c.time, offset) : '';
-    var tzLabel = (offset !== 0 && timeDisplay && timeDisplay !== c.time) ? ' PT' : '';
-    var tr = document.createElement('tr');
-    tr.innerHTML =
-      '<td>' + esc(client) + '</td>' +
-      '<td>' + esc(student) + '</td>' +
-      '<td>' + esc(term) + '</td>' +
-      '<td>' + esc(c.code) + '</td>' +
-      '<td>' + esc(c.days) + '</td>' +
-      '<td>' + esc(timeDisplay + tzLabel) + '</td>';
-    tbody.appendChild(tr);
-  });
-
-  // Master class list
-  var masterLines = courses.map(function(c) {
-    return [client, student, term, c.code].join('\t');
-  });
-
-  // WhenIWork
-  var wiwLines = courses.map(function(c) {
-    var timeOut = c.time ? convertRange(c.time, offset) : '';
-    var tzLabel = (offset !== 0 && timeOut && timeOut !== c.time) ? ' PT' : '';
     var daysPart = c.days ? ' (' + c.days + ')' : '';
-    var name = student + ' - ' + c.code + daysPart;
-    return timeOut ? name + '    ' + timeOut + tzLabel : name;
+    var timeConverted = c.time ? convertRange(c.time, offset) : '';
+    var tzLabel = (offset!==0 && timeConverted && timeConverted!==c.time) ? ' PT' : '';
+    var base = student + ' - ' + c.code + daysPart;
+
+    if (c.teamType === 'solo') {
+      masterLines.push([client, student, term, c.code].join('\t'));
+      var suffix = buildSuffix('', c.loc);
+      var name = base + suffix;
+      wiwLines.push(timeConverted ? name + '    ' + timeConverted + tzLabel : name);
+
+    } else if (c.teamType === 'team') {
+      masterLines.push([client, student, term, c.code].join('\t'));
+      var suffix = buildSuffix('Teamed', c.loc);
+      var name = base + suffix;
+      wiwLines.push(timeConverted ? name + '    ' + timeConverted + tzLabel : name);
+
+    } else if (c.teamType === 'seq') {
+      var n = c.parts || 2;
+      var slices = c.time ? splitTime(c.time, n, offset) : [];
+      for (var i=1; i<=n; i++) {
+        masterLines.push([client, student, term, c.code].join('\t'));
+        var teamLabel = 'Sequential team ' + i + '/' + n;
+        var suffix = buildSuffix(teamLabel, c.loc);
+        var name = base + suffix;
+        var t = slices[i-1] || timeConverted;
+        wiwLines.push(t ? name + '    ' + t + tzLabel : name);
+      }
+    }
   });
 
   document.getElementById('masterOut').value = masterLines.join('\n');
   document.getElementById('wiwOut').value = wiwLines.join('\n');
   document.getElementById('resultSection').style.display = 'block';
-  document.getElementById('statusMsg').textContent =
-    courses.length + ' course' + (courses.length !== 1 ? 's' : '') + ' processed';
-
-  document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  setStatus(courses.length + ' course' + (courses.length!==1?'s':'') + ' processed');
+  document.getElementById('resultSection').scrollIntoView({ behavior:'smooth', block:'start' });
 }
 
-// ── Helpers ────────────────────────────────────────────────────────────────
 function copyOut(id) {
   var el = document.getElementById(id);
   navigator.clipboard.writeText(el.value).then(function() {
-    document.getElementById('statusMsg').textContent = 'Copied to clipboard';
-    setTimeout(function() { document.getElementById('statusMsg').textContent = ''; }, 2000);
+    setStatus('Copied to clipboard');
+    setTimeout(function(){ setStatus(''); }, 2000);
   });
 }
 
 function clearAll() {
-  ['clientName','studentName','termName','courseBlock'].forEach(function(id) {
+  ['clientName','studentName','termName','pasteBlock'].forEach(function(id){
     document.getElementById(id).value = '';
   });
   document.getElementById('sourceTz').value = '0';
+  document.getElementById('courseBody').innerHTML = '';
+  rowCount = 0;
   document.getElementById('resultSection').style.display = 'none';
   document.getElementById('errorArea').style.display = 'none';
-  document.getElementById('statusMsg').textContent = '';
+  setStatus('');
 }
 
 function showError(msg) {
@@ -504,8 +668,10 @@ function showError(msg) {
   el.style.display = 'block';
 }
 
+function setStatus(msg) { document.getElementById('statusMsg').textContent = msg; }
+
 function esc(str) {
-  return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return (str||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 </script>
 

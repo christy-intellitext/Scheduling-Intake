@@ -718,10 +718,10 @@ function generate() {
         var dur = r.end - r.start;
         // Midnight crossing check applies to all shift types
         if (dur < 0) {
-          warnings.push('⚠️ ' + c.code + ': Time appears to cross midnight (' + c.time + '). Double-check AM/PM — this is likely a typo.');
+          warnings.push(c.code + ': Time appears to cross midnight (' + c.time + '). Double-check AM/PM — this is likely a typo.');
         } else if (c.teamType === 'solo' && dur > 90) {
           // Solo-only length warning
-          warnings.push('⚠️ ' + c.code + ': Solo shift is over 1.5 hours. Consider teaming.');
+          warnings.push(c.code + ': Solo shift is over 1.5 hours. Consider teaming.');
         }
       }
     }
@@ -770,12 +770,12 @@ function generate() {
       return '<div style="display:flex;align-items:flex-start;gap:8px;"><span style="font-size:16px;">⚠️</span><span>' + w + '</span></div>';
     }).join('');
     warnEl.style.display = 'block';
+    warnEl.scrollIntoView({ behavior:'smooth', block:'center' });
   } else {
     warnEl.style.display = 'none';
     warnEl.innerHTML = '';
+    document.getElementById('resultSection').scrollIntoView({ behavior:'smooth', block:'start' });
   }
-
-  document.getElementById('resultSection').scrollIntoView({ behavior:'smooth', block:'start' });
 }
 
 function copyOut(id) {
@@ -812,7 +812,7 @@ function esc(str) {
 </script>
 
 <div style="text-align:center; margin-top:32px; font-family:'Comfortaa',sans-serif; font-size:11px; color:#7a9a8a; letter-spacing:0.04em;">
-  Authorized Use Only &mdash; Intellitext LLC 2026 &mdash; V 1.6
+  Authorized Use Only &mdash; Intellitext LLC 2026 &mdash; V 1.8
 </div>
 
 </body>

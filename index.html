@@ -137,28 +137,27 @@
     width: 100%;
     border-collapse: collapse;
     font-size: 12.5px;
-    min-width: 900px;
   }
 
   .course-table thead th {
     font-family: 'Comfortaa', sans-serif;
-    font-size: 10.5px;
+    font-size: 10px;
     font-weight: 700;
     color: #5a7a6a;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    padding: 0 6px 8px;
+    letter-spacing: 0.04em;
+    padding: 0 3px 8px;
     text-align: left;
     white-space: nowrap;
   }
 
   .course-table tbody tr { vertical-align: middle; }
-  .course-table tbody td { padding: 4px 5px; }
+  .course-table tbody td { padding: 3px 3px; }
 
   .course-table input[type="text"],
   .course-table input[type="number"],
   .course-table select {
-    padding: 7px 8px;
+    padding: 6px 6px;
     font-size: 12px;
   }
 
@@ -197,9 +196,9 @@
 
   /* Tighter labels specifically in the location column */
   .col-loc .toggle-group label {
-    padding: 4px 5px;
-    font-size: 10px;
-    letter-spacing: -0.01em;
+    padding: 3px 5px;
+    font-size: 9.5px;
+    letter-spacing: -0.02em;
   }
 
   .parts-wrap { display: flex; align-items: center; gap: 4px; }
@@ -331,13 +330,13 @@
   .hint { font-size: 11.5px; color: #5a7a6a; margin-top: 8px; line-height: 1.5; }
 
   /* Col widths */
-  .col-code  { min-width: 140px; width: 16%; }
-  .col-days  { min-width: 70px;  width: 8%; }
-  .col-time  { min-width: 130px; width: 14%; }
-  .col-team  { min-width: 185px; width: 20%; }
-  .col-parts { min-width: 80px;  width: 9%; }
-  .col-loc   { min-width: 310px; width: 32%; }
-  .col-del   { min-width: 34px;  width: 4%; }
+  .col-code  { min-width: 110px; width: 14%; }
+  .col-days  { min-width: 55px;  width: 6%; }
+  .col-time  { min-width: 110px; width: 12%; }
+  .col-team  { min-width: 165px; width: 18%; }
+  .col-parts { min-width: 70px;  width: 8%; }
+  .col-loc   { min-width: 0;     width: auto; }
+  .col-del   { min-width: 30px;  width: 30px; }
 </style>
 </head>
 <body>
@@ -812,7 +811,7 @@ function esc(str) {
 </script>
 
 <div style="text-align:center; margin-top:32px; font-family:'Comfortaa',sans-serif; font-size:11px; color:#7a9a8a; letter-spacing:0.04em;">
-  Authorized Use Only &mdash; Intellitext LLC 2026 &mdash; V 1.8
+  Authorized Use Only &mdash; Intellitext LLC 2026 &mdash; V 1.9
 </div>
 
 </body>

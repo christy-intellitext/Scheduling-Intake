@@ -712,11 +712,17 @@ function generate() {
   var warnings = [];
 
   courses.forEach(function(c) {
-    // Warn if solo shift is longer than 4 hours (240 min)
-    if (c.teamType === 'solo' && c.time) {
+    if (c.time) {
       var r = parseRange(c.time);
-      if (r && (r.end - r.start) > 90) {
-        warnings.push(c.code + ': Solo shift is over 1.5 hours. Consider teaming.');
+      if (r) {
+        var dur = r.end - r.start;
+        // Midnight crossing check applies to all shift types
+        if (dur < 0) {
+          warnings.push('⚠️ ' + c.code + ': Time appears to cross midnight (' + c.time + '). Double-check AM/PM — this is likely a typo.');
+        } else if (c.teamType === 'solo' && dur > 90) {
+          // Solo-only length warning
+          warnings.push('⚠️ ' + c.code + ': Solo shift is over 1.5 hours. Consider teaming.');
+        }
       }
     }
   });
@@ -806,7 +812,7 @@ function esc(str) {
 </script>
 
 <div style="text-align:center; margin-top:32px; font-family:'Comfortaa',sans-serif; font-size:11px; color:#7a9a8a; letter-spacing:0.04em;">
-  Authorized Use Only &mdash; Intellitext LLC 2026 &mdash; V 1.5
+  Authorized Use Only &mdash; Intellitext LLC 2026 &mdash; V 1.6
 </div>
 
 </body>

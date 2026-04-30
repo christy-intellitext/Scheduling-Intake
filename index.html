@@ -4,52 +4,57 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Intellitext Schedule Intake</title>
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    font-size: 14px;
-    background: #f4f3ef;
+    font-family: 'Comfortaa', sans-serif;
+    background: #dce4df;
+    padding: 40px 20px 80px;
     color: #1a1a1a;
     min-height: 100vh;
   }
 
-  header {
-    background: #fff;
-    border-bottom: 1px solid #e2e0d8;
-    padding: 0 28px;
-    height: 54px;
-    display: flex;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 10;
+  .form-container {
+    background: #f5f8f6;
+    max-width: 1020px;
+    margin: 0 auto;
+    padding: 30px;
+    border-radius: 10px;
   }
 
-  .logo { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
-  .logo span { color: #9ca3af; font-weight: 400; }
+  .logo {
+    display: block;
+    margin: 0 auto 10px;
+    max-width: 200px;
+  }
 
-  .main {
-    max-width: 1060px;
-    margin: 0 auto;
-    padding: 28px 20px 80px;
+  .page-title {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: #2c6a4d;
+    margin-bottom: 28px;
+    letter-spacing: 0.01em;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #2c6a4d;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #b5c0bb;
   }
 
   .card {
     background: #fff;
-    border: 1px solid #e2e0d8;
-    border-radius: 12px;
-    padding: 22px 24px;
-    margin-bottom: 14px;
-  }
-
-  .card-title {
-    font-size: 11px;
-    font-weight: 600;
-    color: #9ca3af;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    border: 1px solid #b5c0bb;
+    border-radius: 10px;
+    padding: 20px 22px;
     margin-bottom: 14px;
   }
 
@@ -64,36 +69,38 @@
   .field label {
     display: block;
     font-size: 11px;
-    font-weight: 500;
-    color: #9ca3af;
+    font-weight: 700;
+    color: #5a7a6a;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     margin-bottom: 5px;
   }
 
-  input[type="text"], input[type="number"], select, textarea {
+  input[type="text"],
+  input[type="number"],
+  select,
+  textarea {
+    font-family: 'Comfortaa', sans-serif;
     width: 100%;
     padding: 8px 10px;
-    border: 1px solid #e2e0d8;
-    border-radius: 7px;
+    border: 1px solid #b5c0bb;
+    border-radius: 6px;
     font-size: 13px;
-    font-family: inherit;
     color: #1a1a1a;
-    background: #fafaf8;
+    background: #f5f8f6;
     transition: border-color 0.15s;
     appearance: none;
   }
 
   input:focus, select:focus, textarea:focus {
     outline: none;
-    border-color: #9ca3af;
+    border-color: #2c6a4d;
     background: #fff;
   }
 
-  input::placeholder, textarea::placeholder { color: #c4c2bb; }
+  input::placeholder, textarea::placeholder { color: #aabcb3; }
 
   textarea {
-    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     font-size: 13px;
     line-height: 1.7;
     resize: vertical;
@@ -108,17 +115,17 @@
   .format-hint {
     margin-top: 10px;
     padding: 11px 14px;
-    background: #f4f3ef;
-    border-radius: 7px;
+    background: #dce4df;
+    border-radius: 6px;
     font-size: 12px;
-    color: #6b7280;
+    color: #4a6a5a;
     line-height: 1.7;
   }
   .format-hint .example {
     margin-top: 6px;
-    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-family: 'Courier New', monospace;
     font-size: 11.5px;
-    color: #374151;
+    color: #2c6a4d;
     white-space: pre;
     line-height: 1.9;
   }
@@ -134,9 +141,10 @@
   }
 
   .course-table thead th {
+    font-family: 'Comfortaa', sans-serif;
     font-size: 10.5px;
-    font-weight: 600;
-    color: #9ca3af;
+    font-weight: 700;
+    color: #5a7a6a;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     padding: 0 6px 8px;
@@ -165,40 +173,44 @@
   .toggle-group input[type="checkbox"] { display: none; }
 
   .toggle-group label {
+    font-family: 'Comfortaa', sans-serif;
     display: inline-block;
     padding: 4px 7px;
     font-size: 10.5px;
-    font-weight: 500;
-    border: 1px solid #e2e0d8;
+    font-weight: 700;
+    border: 1px solid #b5c0bb;
     border-radius: 5px;
     cursor: pointer;
-    color: #9ca3af;
-    background: #fafaf8;
+    color: #7a9a8a;
+    background: #f5f8f6;
     transition: all 0.12s;
-    text-transform: none;
-    letter-spacing: 0;
     white-space: nowrap;
     user-select: none;
   }
 
   .toggle-group input[type="radio"]:checked + label,
   .toggle-group input[type="checkbox"]:checked + label {
-    background: #1a1a1a;
+    background: #2c6a4d;
     color: #fff;
-    border-color: #1a1a1a;
+    border-color: #2c6a4d;
   }
 
   .parts-wrap { display: flex; align-items: center; gap: 4px; }
-  .parts-wrap input[type="number"] { width: 52px; opacity: 0.3; pointer-events: none; transition: opacity 0.15s; }
+  .parts-wrap input[type="number"] {
+    width: 52px;
+    opacity: 0.3;
+    pointer-events: none;
+    transition: opacity 0.15s;
+  }
   .parts-wrap input[type="number"].active { opacity: 1; pointer-events: auto; }
-  .parts-wrap span { font-size: 11px; color: #9ca3af; }
+  .parts-wrap span { font-size: 11px; color: #7a9a8a; }
 
   .remove-btn {
     width: 28px; height: 28px;
-    border: 1px solid #e2e0d8;
+    border: 1px solid #b5c0bb;
     border-radius: 5px;
-    background: #fff;
-    color: #9ca3af;
+    background: #f5f8f6;
+    color: #7a9a8a;
     font-size: 16px;
     cursor: pointer;
     display: flex;
@@ -209,22 +221,24 @@
   .remove-btn:hover { background: #fef2f2; border-color: #fca5a5; color: #dc2626; }
 
   .add-btn {
+    font-family: 'Comfortaa', sans-serif;
     display: inline-flex;
     align-items: center;
     gap: 6px;
     margin-top: 12px;
     padding: 7px 14px;
-    border: 1px dashed #d1d5db;
-    border-radius: 7px;
+    border: 1px dashed #b5c0bb;
+    border-radius: 6px;
     background: transparent;
-    color: #6b7280;
+    color: #5a7a6a;
     font-size: 13px;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.12s;
   }
-  .add-btn:hover { border-color: #9ca3af; color: #374151; background: #f9fafb; }
+  .add-btn:hover { border-color: #2c6a4d; color: #2c6a4d; background: #dce4df; }
 
-  .divider { border: none; border-top: 1px solid #e2e0d8; margin: 16px 0; }
+  .divider { border: none; border-top: 1px solid #b5c0bb; margin: 16px 0; }
 
   /* Buttons */
   .btn-row {
@@ -235,31 +249,39 @@
     margin-bottom: 20px;
   }
 
+  button {
+    font-family: 'Comfortaa', sans-serif;
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+
   .btn {
     padding: 9px 22px;
-    border-radius: 7px;
+    border-radius: 6px;
     font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    border: 1px solid #d1d5db;
+    font-weight: 700;
+    border: 1px solid #b5c0bb;
     background: #fff;
-    color: #1a1a1a;
-    transition: all 0.12s;
-    white-space: nowrap;
+    color: #2c6a4d;
   }
-  .btn:hover { background: #f4f3ef; border-color: #9ca3af; }
+  .btn:hover { background: #dce4df; border-color: #2c6a4d; }
   .btn:active { transform: scale(0.98); }
-  .btn-primary { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
-  .btn-primary:hover { background: #333; border-color: #333; }
+
+  .btn-primary {
+    background: #2c6a4d;
+    color: #fff;
+    border-color: #2c6a4d;
+  }
+  .btn-primary:hover { background: #225539; border-color: #225539; }
   .btn-sm { padding: 5px 12px; font-size: 12px; }
 
-  #statusMsg { font-size: 13px; color: #6b7280; }
+  #statusMsg { font-size: 13px; color: #5a7a6a; }
 
   /* Output */
   .result-section { display: none; }
 
   .output-block {
-    border: 1px solid #e2e0d8;
+    border: 1px solid #b5c0bb;
     border-radius: 10px;
     overflow: hidden;
     margin-bottom: 12px;
@@ -270,12 +292,12 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 14px;
-    background: #f4f3ef;
-    border-bottom: 1px solid #e2e0d8;
+    background: #dce4df;
+    border-bottom: 1px solid #b5c0bb;
   }
 
-  .output-label { font-size: 12px; font-weight: 600; color: #374151; }
-  .output-hint { font-size: 11px; color: #9ca3af; margin-top: 1px; }
+  .output-label { font-size: 12px; font-weight: 700; color: #2c6a4d; }
+  .output-hint { font-size: 11px; color: #5a7a6a; margin-top: 1px; }
 
   .output-block textarea {
     border: none;
@@ -283,9 +305,10 @@
     background: #fff;
     height: 160px;
     resize: vertical;
+    font-family: 'Courier New', monospace;
     font-size: 12px;
   }
-  .output-block textarea:focus { outline: none; }
+  .output-block textarea:focus { outline: none; border: none; }
 
   .error-box {
     padding: 11px 16px;
@@ -298,7 +321,7 @@
     display: none;
   }
 
-  .hint { font-size: 11.5px; color: #9ca3af; margin-top: 8px; line-height: 1.5; }
+  .hint { font-size: 11.5px; color: #5a7a6a; margin-top: 8px; line-height: 1.5; }
 
   /* Col widths */
   .col-code  { min-width: 140px; width: 16%; }
@@ -312,15 +335,14 @@
 </head>
 <body>
 
-<header>
-  <div class="logo">Intellitext <span>/ Schedule Intake</span></div>
-</header>
+<div class="form-container">
 
-<div class="main">
+  <img src="https://i.imgur.com/YkhiJRe.png" alt="Intellitext" class="logo">
+  <div class="page-title">Schedule Intake</div>
 
   <!-- Student & session -->
   <div class="card">
-    <div class="card-title">Student &amp; session</div>
+    <div class="section-label">Student &amp; session</div>
     <div class="fields-row">
       <div class="field">
         <label>Client</label>
@@ -350,7 +372,7 @@
 
   <!-- Courses -->
   <div class="card">
-    <div class="card-title">Courses</div>
+    <div class="section-label">Courses</div>
 
     <div class="field" style="margin-bottom:10px;">
       <label>Paste course block &mdash; one per line: Course code, Days, Start-End time</label>
@@ -358,13 +380,14 @@
         <textarea id="pasteBlock" placeholder="FILM 300.1001, W, 6:00-9:00pm&#10;FILM 315.1001, T, 10:00-12:45pm&#10;FILM 417.1002, W, 10:00-12:45pm"></textarea>
         <div class="paste-actions">
           <button class="btn" onclick="importPaste()">Import &darr;</button>
-          <button class="btn" onclick="document.getElementById('pasteBlock').value=''" style="font-size:12px;opacity:0.6;">Clear</button>
+          <button class="btn" onclick="document.getElementById('pasteBlock').value=''" style="font-size:12px;opacity:0.7;">Clear</button>
         </div>
       </div>
       <div class="format-hint">
-        Format: <span style="font-family:monospace;font-size:11.5px;background:#e8e6e0;padding:1px 5px;border-radius:4px;">Course code, Days, Start-End time</span>
+        Format: <span style="font-family:'Courier New',monospace;font-size:11.5px;background:#b5c0bb;padding:1px 5px;border-radius:4px;color:#1a1a1a;">Course code, Days, Start-End time</span>
         <div class="example">FILM 300.1001, W, 6:00-9:00pm
-MATH 251.105, MWF, 9:00-9:50am</div>
+MATH 251.105, MWF, 9-9:50am
+NURS 419.1002, TTh, 1-2:15pm</div>
       </div>
     </div>
 
@@ -443,7 +466,6 @@ function addRow(code, days, time) {
   rowCount++;
   var id = rowCount;
 
-  // Build location radio options
   var locHtml = '<div class="toggle-group">';
   LOCATION_OPTIONS.forEach(function(opt, i) {
     var rid = 'loc_' + id + '_' + i;
@@ -549,22 +571,27 @@ function fmtMin(total) {
 }
 
 function parseTime(str) {
-  // Flexible: handles 6pm, 6PM, 6 pm, 6:00pm, 6:00 PM, 6:00PM
-  var rx = /(\d{1,2})(?::(\d{2}))?\s*(am|pm)/i;
+  // Handles: 6pm, 6PM, 6p, 6 pm, 6 p, 6:00pm, 6:00 PM, 6:00p, 6:30am, etc.
+  var rx = /(\d{1,2})(?::(\d{2}))?\s*(am?|pm?)/i;
   var m = rx.exec(str.trim());
   if (!m) return null;
-  return toMin(m[1], m[2]||'0', m[3]);
+  var ap = m[3].toLowerCase();
+  if (ap === 'p') ap = 'pm';
+  if (ap === 'a') ap = 'am';
+  return toMin(m[1], m[2]||'0', ap);
 }
 
 function parseRange(str) {
-  // Split on dash/en-dash with optional surrounding spaces
-  var parts = str.split(/\s*[-\u2013]\s*/);
-  if (parts.length < 2) return null;
-  var startStr = parts[0].trim();
-  var endStr = parts.slice(1).join('-').trim();
-  // If start has no am/pm, borrow from end (e.g. "6-9pm" -> "6pm-9pm")
-  if (!/(am|pm)/i.test(startStr) && /(am|pm)/i.test(endStr)) {
-    var ap = endStr.match(/(am|pm)/i)[0];
+  var sepRx = /(?<=[\d\s]|am?|pm?)\s*[-\u2013]\s*/i;
+  var idx = str.search(sepRx);
+  if (idx < 0) {
+    idx = str.indexOf('-');
+    if (idx < 0) return null;
+  }
+  var startStr = str.slice(0, idx).trim();
+  var endStr   = str.slice(idx).replace(/^\s*[-\u2013]\s*/, '').trim();
+  if (!/(am?|pm?)/i.test(startStr) && /(am?|pm?)/i.test(endStr)) {
+    var ap = endStr.match(/(am?|pm?)/i)[0];
     startStr = startStr + ap;
   }
   var start = parseTime(startStr);
@@ -629,14 +656,12 @@ function generate() {
 
     if (c.teamType === 'solo') {
       masterLines.push([client, student, term, c.code].join('\t'));
-      var suffix = buildSuffix('', c.loc);
-      var name = base + suffix;
+      var name = base + buildSuffix('', c.loc);
       wiwLines.push(timeConverted ? name + '    ' + timeConverted + tzLabel : name);
 
     } else if (c.teamType === 'team') {
       masterLines.push([client, student, term, c.code].join('\t'));
-      var suffix = buildSuffix('Teamed', c.loc);
-      var name = base + suffix;
+      var name = base + buildSuffix('Teamed', c.loc);
       wiwLines.push(timeConverted ? name + '    ' + timeConverted + tzLabel : name);
 
     } else if (c.teamType === 'seq') {
@@ -644,9 +669,7 @@ function generate() {
       var slices = c.time ? splitTime(c.time, n, offset) : [];
       for (var i=1; i<=n; i++) {
         masterLines.push([client, student, term, c.code].join('\t'));
-        var teamLabel = 'Sequential team ' + i + '/' + n;
-        var suffix = buildSuffix(teamLabel, c.loc);
-        var name = base + suffix;
+        var name = base + buildSuffix('Sequential team ' + i + '/' + n, c.loc);
         var t = slices[i-1] || timeConverted;
         wiwLines.push(t ? name + '    ' + t + tzLabel : name);
       }

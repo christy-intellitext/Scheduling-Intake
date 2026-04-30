@@ -130,7 +130,7 @@
     width: 100%;
     border-collapse: collapse;
     font-size: 12.5px;
-    min-width: 820px;
+    min-width: 900px;
   }
 
   .course-table thead th {
@@ -157,7 +157,7 @@
   /* Toggle pill buttons */
   .toggle-group {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 3px;
   }
 
@@ -166,8 +166,8 @@
 
   .toggle-group label {
     display: inline-block;
-    padding: 4px 9px;
-    font-size: 11px;
+    padding: 4px 7px;
+    font-size: 10.5px;
     font-weight: 500;
     border: 1px solid #e2e0d8;
     border-radius: 5px;
@@ -306,7 +306,7 @@
   .col-time  { min-width: 130px; width: 14%; }
   .col-team  { min-width: 185px; width: 20%; }
   .col-parts { min-width: 80px;  width: 9%; }
-  .col-loc   { min-width: 250px; width: 29%; }
+  .col-loc   { min-width: 310px; width: 32%; }
   .col-del   { min-width: 34px;  width: 4%; }
 </style>
 </head>
@@ -548,11 +548,29 @@ function fmtMin(total) {
   return dh+(mn?':'+String(mn).padStart(2,'0'):'')+ap;
 }
 
-function parseRange(str) {
-  var rx = /(\d{1,2}):?(\d{2})?\s*(am|pm)?\s*[-\u2013]\s*(\d{1,2}):?(\d{2})?\s*(am|pm)/i;
-  var m = rx.exec(str);
+function parseTime(str) {
+  // Flexible: handles 6pm, 6PM, 6 pm, 6:00pm, 6:00 PM, 6:00PM
+  var rx = /(\d{1,2})(?::(\d{2}))?\s*(am|pm)/i;
+  var m = rx.exec(str.trim());
   if (!m) return null;
-  return { start: toMin(m[1],m[2],m[3]||m[6]), end: toMin(m[4],m[5],m[6]) };
+  return toMin(m[1], m[2]||'0', m[3]);
+}
+
+function parseRange(str) {
+  // Split on dash/en-dash with optional surrounding spaces
+  var parts = str.split(/\s*[-\u2013]\s*/);
+  if (parts.length < 2) return null;
+  var startStr = parts[0].trim();
+  var endStr = parts.slice(1).join('-').trim();
+  // If start has no am/pm, borrow from end (e.g. "6-9pm" -> "6pm-9pm")
+  if (!/(am|pm)/i.test(startStr) && /(am|pm)/i.test(endStr)) {
+    var ap = endStr.match(/(am|pm)/i)[0];
+    startStr = startStr + ap;
+  }
+  var start = parseTime(startStr);
+  var end   = parseTime(endStr);
+  if (start === null || end === null) return null;
+  return { start: start, end: end };
 }
 
 function convertRange(str, off) {

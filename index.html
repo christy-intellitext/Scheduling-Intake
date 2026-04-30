@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Intellitext Tools</title>
+<title>Intellitext Schedule Intake</title>
 <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -11,166 +11,803 @@
   body {
     font-family: 'Comfortaa', sans-serif;
     background: #dce4df;
+    padding: 40px 20px 80px;
+    color: #1a1a1a;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 60px 20px 80px;
+  }
+
+  .form-container {
+    background: #f5f8f6;
+    max-width: 1020px;
+    margin: 0 auto;
+    padding: 30px;
+    border-radius: 10px;
   }
 
   .logo {
     display: block;
+    margin: 0 auto 10px;
     max-width: 200px;
-    margin: 0 auto 12px;
   }
 
   .page-title {
-    font-size: 22px;
+    text-align: center;
+    font-size: 18px;
     font-weight: 700;
     color: #2c6a4d;
-    text-align: center;
+    margin-bottom: 28px;
     letter-spacing: 0.01em;
-    margin-bottom: 6px;
   }
 
-  .page-subtitle {
-    font-size: 13px;
-    color: #7a9a8a;
-    text-align: center;
-    margin-bottom: 48px;
-  }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    max-width: 900px;
-    width: 100%;
-  }
-
-  @media (max-width: 700px) {
-    .grid { grid-template-columns: 1fr; }
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #2c6a4d;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #b5c0bb;
   }
 
   .card {
-    background: #f5f8f6;
+    background: #fff;
     border: 1px solid #b5c0bb;
-    border-radius: 12px;
-    padding: 28px 24px 24px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-    text-decoration: none;
-    color: inherit;
-    transition: all 0.15s;
-    position: relative;
-    overflow: hidden;
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin-bottom: 14px;
   }
 
-  .card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 4px;
-    background: #2c6a4d;
-    opacity: 0;
-    transition: opacity 0.15s;
+  .fields-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 12px;
   }
 
-  .card:hover {
+  @media (max-width: 640px) { .fields-row { grid-template-columns: 1fr 1fr; } }
+
+  .field label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #5a7a6a;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 5px;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  select,
+  textarea {
+    font-family: 'Comfortaa', sans-serif;
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #b5c0bb;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #1a1a1a;
+    background: #f5f8f6;
+    transition: border-color 0.15s;
+    appearance: none;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    outline: none;
     border-color: #2c6a4d;
     background: #fff;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(44,106,77,0.1);
   }
 
-  .card:hover::before { opacity: 1; }
+  input::placeholder, textarea::placeholder { color: #aabcb3; }
 
-  .card-icon {
-    width: 42px;
-    height: 42px;
+  textarea {
+    font-size: 13px;
+    line-height: 1.7;
+    resize: vertical;
+    height: 130px;
+  }
+
+  /* Paste area */
+  .paste-row { display: flex; gap: 10px; align-items: flex-start; }
+  .paste-row textarea { flex: 1; }
+  .paste-actions { display: flex; flex-direction: column; gap: 8px; padding-top: 2px; }
+
+  .format-hint {
+    margin-top: 10px;
+    padding: 11px 14px;
     background: #dce4df;
-    border-radius: 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #4a6a5a;
+    line-height: 1.7;
+  }
+  .format-hint .example {
+    margin-top: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 11.5px;
+    color: #2c6a4d;
+    white-space: pre;
+    line-height: 1.9;
+  }
+
+  /* Course table */
+  .course-table-wrap { overflow-x: auto; margin-top: 4px; }
+
+  .course-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+    min-width: 900px;
+  }
+
+  .course-table thead th {
+    font-family: 'Comfortaa', sans-serif;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #5a7a6a;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0 6px 8px;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .course-table tbody tr { vertical-align: middle; }
+  .course-table tbody td { padding: 4px 5px; }
+
+  .course-table input[type="text"],
+  .course-table input[type="number"],
+  .course-table select {
+    padding: 7px 8px;
+    font-size: 12px;
+  }
+
+  /* Toggle pill buttons */
+  .toggle-group {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 3px;
+  }
+
+  .toggle-group input[type="radio"],
+  .toggle-group input[type="checkbox"] { display: none; }
+
+  .toggle-group label {
+    font-family: 'Comfortaa', sans-serif;
+    display: inline-block;
+    padding: 4px 7px;
+    font-size: 10.5px;
+    font-weight: 700;
+    border: 1px solid #b5c0bb;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #7a9a8a;
+    background: #f5f8f6;
+    transition: all 0.12s;
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  .toggle-group input[type="radio"]:checked + label,
+  .toggle-group input[type="checkbox"]:checked + label {
+    background: #2c6a4d;
+    color: #fff;
+    border-color: #2c6a4d;
+  }
+
+  /* Tighter labels specifically in the location column */
+  .col-loc .toggle-group label {
+    padding: 4px 5px;
+    font-size: 10px;
+    letter-spacing: -0.01em;
+  }
+
+  .parts-wrap { display: flex; align-items: center; gap: 4px; }
+  .parts-wrap input[type="number"] {
+    width: 52px;
+    opacity: 0.3;
+    pointer-events: none;
+    transition: opacity 0.15s;
+  }
+  .parts-wrap input[type="number"].active { opacity: 1; pointer-events: auto; }
+  .parts-wrap span { font-size: 11px; color: #7a9a8a; }
+
+  .remove-btn {
+    width: 28px; height: 28px;
+    border: 1px solid #b5c0bb;
+    border-radius: 5px;
+    background: #f5f8f6;
+    color: #7a9a8a;
+    font-size: 16px;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
-    margin-bottom: 4px;
+    transition: all 0.12s;
   }
+  .remove-btn:hover { background: #fef2f2; border-color: #fca5a5; color: #dc2626; }
 
-  .card-title {
-    font-size: 15px;
-    font-weight: 700;
-    color: #2c6a4d;
-    line-height: 1.3;
-  }
-
-  .card-desc {
-    font-size: 12px;
-    color: #7a9a8a;
-    line-height: 1.6;
-    flex: 1;
-  }
-
-  .card-link {
-    font-size: 12px;
-    font-weight: 700;
-    color: #2c6a4d;
-    margin-top: 6px;
+  .add-btn {
+    font-family: 'Comfortaa', sans-serif;
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
+    margin-top: 12px;
+    padding: 7px 14px;
+    border: 1px dashed #b5c0bb;
+    border-radius: 6px;
+    background: transparent;
+    color: #5a7a6a;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .add-btn:hover { border-color: #2c6a4d; color: #2c6a4d; background: #dce4df; }
+
+  .divider { border: none; border-top: 1px solid #b5c0bb; margin: 16px 0; }
+
+  /* Buttons */
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
   }
 
-  .card-link::after {
-    content: '→';
-    transition: transform 0.12s;
+  button {
+    font-family: 'Comfortaa', sans-serif;
+    cursor: pointer;
+    transition: all 0.12s;
   }
 
-  .card:hover .card-link::after { transform: translateX(3px); }
-
-  footer {
-    margin-top: 56px;
-    font-size: 11px;
-    color: #7a9a8a;
-    text-align: center;
-    letter-spacing: 0.04em;
+  .btn {
+    padding: 9px 22px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    border: 1px solid #b5c0bb;
+    background: #fff;
+    color: #2c6a4d;
   }
+  .btn:hover { background: #dce4df; border-color: #2c6a4d; }
+  .btn:active { transform: scale(0.98); }
+
+  .btn-primary {
+    background: #2c6a4d;
+    color: #fff;
+    border-color: #2c6a4d;
+  }
+  .btn-primary:hover { background: #225539; border-color: #225539; }
+  .btn-sm { padding: 5px 12px; font-size: 12px; }
+
+  #statusMsg { font-size: 13px; color: #5a7a6a; }
+
+  /* Output */
+  .result-section { display: none; }
+
+  .output-block {
+    border: 1px solid #b5c0bb;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+
+  .output-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: #dce4df;
+    border-bottom: 1px solid #b5c0bb;
+  }
+
+  .output-label { font-size: 12px; font-weight: 700; color: #2c6a4d; }
+  .output-hint { font-size: 11px; color: #5a7a6a; margin-top: 1px; }
+
+  .output-block textarea {
+    border: none;
+    border-radius: 0;
+    background: #fff;
+    height: 160px;
+    resize: vertical;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+  }
+  .output-block textarea:focus { outline: none; border: none; }
+
+  .error-box {
+    padding: 11px 16px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #dc2626;
+    margin-bottom: 12px;
+    display: none;
+  }
+
+  .hint { font-size: 11.5px; color: #5a7a6a; margin-top: 8px; line-height: 1.5; }
+
+  /* Col widths */
+  .col-code  { min-width: 140px; width: 16%; }
+  .col-days  { min-width: 70px;  width: 8%; }
+  .col-time  { min-width: 130px; width: 14%; }
+  .col-team  { min-width: 185px; width: 20%; }
+  .col-parts { min-width: 80px;  width: 9%; }
+  .col-loc   { min-width: 310px; width: 32%; }
+  .col-del   { min-width: 34px;  width: 4%; }
 </style>
 </head>
 <body>
 
+<div class="form-container">
+
   <img src="https://i.imgur.com/YkhiJRe.png" alt="Intellitext" class="logo">
-  <div class="page-title">Intellitext Tools</div>
-  <div class="page-subtitle">Internal tools for operations, scheduling, and transcription</div>
+  <div class="page-title">Schedule Intake</div>
 
-  <div class="grid">
+  <!-- Student & session -->
+  <div class="card">
+    <div class="section-label">Student &amp; session</div>
+    <div class="fields-row">
+      <div class="field">
+        <label>Client</label>
+        <input type="text" id="clientName" placeholder="e.g. UNLV">
+      </div>
+      <div class="field">
+        <label>Student first name</label>
+        <input type="text" id="studentName" placeholder="e.g. Lex">
+      </div>
+      <div class="field">
+        <label>Term</label>
+        <input type="text" id="termName" placeholder="e.g. SP 26">
+      </div>
+      <div class="field">
+        <label>Source time zone</label>
+        <select id="sourceTz">
+          <option value="3">Eastern (ET)</option>
+          <option value="2">Central (CT)</option>
+          <option value="1">Mountain (MT)</option>
+          <option value="0" selected>Pacific (no conversion)</option>
+          <option value="-1">Alaska (AKT)</option>
+          <option value="-3">Hawaii (HT)</option>
+        </select>
+      </div>
+    </div>
+  </div>
 
-    <a class="card" href="https://christy-intellitext.github.io/Intellitext-Portal/" target="_blank">
-      <div class="card-icon">📋</div>
-      <div class="card-title">Job Reporting Portal</div>
-      <div class="card-desc">Submit transcription job reports, upload transcripts, and log outcomes for attended, no-show, and late cancel shifts.</div>
-      <div class="card-link">Open tool</div>
-    </a>
+  <!-- Courses -->
+  <div class="card">
+    <div class="section-label">Courses</div>
 
-    <a class="card" href="https://christy-intellitext.github.io/Scheduling-Intake/" target="_blank">
-      <div class="card-icon">📅</div>
-      <div class="card-title">Schedule Intake</div>
-      <div class="card-desc">Process student schedules into master class list rows and WhenIWork job site names, with team type and billing note labeling.</div>
-      <div class="card-link">Open tool</div>
-    </a>
+    <div class="field" style="margin-bottom:10px;">
+      <label>Paste course block &mdash; one per line: Course code&nbsp;&nbsp;Days&nbsp;&nbsp;Start-End time</label>
+      <div class="paste-row">
+        <textarea id="pasteBlock" placeholder="FILM 300.1001 W 6:00-9:00pm&#10;FILM 315.1001 T 10:00-12:45pm&#10;FILM 417.1002 W 10:00-12:45pm"></textarea>
+        <div class="paste-actions">
+          <button class="btn" onclick="importPaste()">Import &darr;</button>
+          <button class="btn" onclick="document.getElementById('pasteBlock').value=''" style="font-size:12px;opacity:0.7;">Clear</button>
+        </div>
+      </div>
+      <div class="format-hint">
+        Format: <span style="font-family:'Courier New',monospace;font-size:11.5px;background:#b5c0bb;padding:1px 5px;border-radius:4px;color:#1a1a1a;">Course code&nbsp; Days&nbsp; Start-End time</span>
+        <div class="example">FILM 300.1001 W 6:00-9:00pm
+MATH 251.105 MWF 9-9:50am
+NURS 419.1002 TTh 1-2:15pm</div>
+      </div>
+    </div>
 
-    <a class="card" href="https://christy-intellitext.github.io/AppScript/" target="_blank">
-      <div class="card-icon">✂️</div>
-      <div class="card-title">ScriptFeed Line Splitter</div>
-      <div class="card-desc">Paste a transcript script, set your max line length, clean up formatting, and export a numbered Excel file ready for TypeWell.</div>
-      <div class="card-link">Open tool</div>
-    </a>
+    <hr class="divider">
+
+    <div class="course-table-wrap">
+      <table class="course-table">
+        <thead>
+          <tr>
+            <th class="col-code">Course code</th>
+            <th class="col-days">Days</th>
+            <th class="col-time">Time</th>
+            <th class="col-team">Shift type</th>
+            <th class="col-parts">Parts</th>
+            <th class="col-loc">Location / billing note</th>
+            <th class="col-del"></th>
+          </tr>
+        </thead>
+        <tbody id="courseBody"></tbody>
+      </table>
+    </div>
+
+    <button class="add-btn" onclick="addRow()">+ Add course</button>
+  </div>
+
+  <div class="error-box" id="errorArea"></div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="generate()">Generate outputs</button>
+    <button class="btn" onclick="clearAll()">Clear all</button>
+    <span id="statusMsg"></span>
+  </div>
+
+  <div id="warningArea" style="display:none; padding:12px 16px; background:#fffbeb; border:1px solid #d97706; border-radius:8px; font-size:13px; color:#92400e; margin-bottom:14px; line-height:1.7; font-family:'Comfortaa',sans-serif;"></div>
+
+  <div class="result-section" id="resultSection">
+
+    <div class="output-block">
+      <div class="output-header">
+        <div>
+          <div class="output-label">Master class list rows</div>
+          <div class="output-hint">Tab-separated: Client / User / Term / Job &mdash; paste directly into the Google Sheet</div>
+        </div>
+        <button class="btn btn-sm" onclick="copyOut('masterOut')">Copy</button>
+      </div>
+      <textarea id="masterOut" readonly></textarea>
+    </div>
+
+    <div class="output-block">
+      <div class="output-header">
+        <div>
+          <div class="output-label">WhenIWork job site names</div>
+          <div class="output-hint">One entry per shift &mdash; includes team labels, location notes, and split times</div>
+        </div>
+        <button class="btn btn-sm" onclick="copyOut('wiwOut')">Copy</button>
+      </div>
+      <textarea id="wiwOut" readonly></textarea>
+    </div>
+
+    <div class="output-block">
+      <div class="output-header">
+        <div>
+          <div class="output-label">Time reference</div>
+          <div class="output-hint">Job site name paired with time &mdash; for reference while entering manually</div>
+        </div>
+        <button class="btn btn-sm" onclick="copyOut('timeOut')">Copy</button>
+      </div>
+      <textarea id="timeOut" readonly></textarea>
+    </div>
+
+    <p class="hint">Transcript destination column left blank &mdash; add Drive links manually after pasting into the sheet.</p>
 
   </div>
 
-  <footer>Authorized Use Only &mdash; Intellitext LLC 2026 &mdash; V 1.0</footer>
+</div>
+
+<script>
+var rowCount = 0;
+
+var LOCATION_OPTIONS = [
+  { value: '',         label: 'None' },
+  { value: 'Remote',   label: 'Remote' },
+  { value: 'Onsite',   label: 'Onsite' },
+  { value: 'Remote + 15 min billable transcript edit time', label: 'Remote +15' },
+  { value: 'Onsite + 15 min billable transcript edit time', label: 'Onsite +15' }
+];
+
+function addRow(code, days, time) {
+  rowCount++;
+  var id = rowCount;
+
+  var locHtml = '<div class="toggle-group">';
+  LOCATION_OPTIONS.forEach(function(opt, i) {
+    var rid = 'loc_' + id + '_' + i;
+    var checked = i === 0 ? 'checked' : '';
+    locHtml +=
+      '<input type="radio" name="loc_' + id + '" id="' + rid + '" value="' + esc(opt.value) + '" ' + checked + '>' +
+      '<label for="' + rid + '">' + esc(opt.label) + '</label>';
+  });
+  locHtml += '</div>';
+
+  var tr = document.createElement('tr');
+  tr.id = 'row-' + id;
+  tr.innerHTML =
+    '<td class="col-code"><input type="text" placeholder="FILM 300.1001" value="' + esc(code||'') + '"></td>' +
+    '<td class="col-days"><input type="text" placeholder="MW" value="' + esc(days||'') + '"></td>' +
+    '<td class="col-time"><input type="text" placeholder="6:00-9:00pm" value="' + esc(time||'') + '"></td>' +
+    '<td class="col-team">' +
+      '<div class="toggle-group">' +
+        '<input type="radio" name="team_' + id + '" id="solo_' + id + '" value="solo" checked onchange="onTeamChange(' + id + ')">' +
+        '<label for="solo_' + id + '">Solo</label>' +
+        '<input type="radio" name="team_' + id + '" id="team_' + id + '" value="team" onchange="onTeamChange(' + id + ')">' +
+        '<label for="team_' + id + '">Teamed</label>' +
+        '<input type="radio" name="team_' + id + '" id="seq_' + id + '" value="seq" onchange="onTeamChange(' + id + ')">' +
+        '<label for="seq_' + id + '">Sequential</label>' +
+      '</div>' +
+    '</td>' +
+    '<td class="col-parts">' +
+      '<div class="parts-wrap">' +
+        '<input type="number" id="parts_' + id + '" value="2" min="2" max="6">' +
+        '<span>parts</span>' +
+      '</div>' +
+    '</td>' +
+    '<td class="col-loc">' + locHtml + '</td>' +
+    '<td class="col-del"><button class="remove-btn" onclick="removeRow(' + id + ')">&times;</button></td>';
+
+  document.getElementById('courseBody').appendChild(tr);
+  onTeamChange(id);
+}
+
+function removeRow(id) {
+  var el = document.getElementById('row-' + id);
+  if (el) el.remove();
+}
+
+function onTeamChange(id) {
+  var sel = document.querySelector('input[name="team_' + id + '"]:checked');
+  var pi = document.getElementById('parts_' + id);
+  if (pi) {
+    if (sel && sel.value === 'seq') pi.classList.add('active');
+    else pi.classList.remove('active');
+  }
+}
+
+function parsePasteLine(line) {
+  // Match a time range anywhere in the line: digits, optional colon+mins, am/pm variants, dash, end time
+  var timeRx = /\d{1,2}(?::\d{2})?\s*(?:am?|pm?)\s*[-\u2013]\s*\d{1,2}(?::\d{2})?\s*(?:am?|pm?)/i;
+  var timeMatch = line.match(timeRx);
+  var time = timeMatch ? timeMatch[0].trim() : '';
+  var rest = timeMatch ? line.slice(0, timeMatch.index).trim() : line.trim();
+
+  // Match days: one or more of M,T,W,Th,F,Sa,Su (case-insensitive, various combos)
+  // Days appear as a standalone token -- all caps short word(s) after the course code
+  var daysRx = /\b((?:M(?:on)?|T(?:ue)?(?:s)?|W(?:ed)?|Th(?:u)?(?:r)?(?:s)?|F(?:ri)?|Sa(?:t)?|Su(?:n)?)+)\b/i;
+  // Find last occurrence to avoid matching part of course code
+  var daysMatch = null;
+  var dm;
+  var testRx = new RegExp(daysRx.source, 'gi');
+  while ((dm = testRx.exec(rest)) !== null) { daysMatch = dm; }
+
+  var days = '';
+  var code = rest;
+  if (daysMatch) {
+    days = daysMatch[0].trim();
+    code = (rest.slice(0, daysMatch.index) + rest.slice(daysMatch.index + daysMatch[0].length)).trim();
+  }
+
+  return { code: code, days: days, time: time };
+}
+
+function importPaste() {
+  var raw = document.getElementById('pasteBlock').value.trim();
+  if (!raw) return;
+  var lines = raw.split('\n').map(function(l){ return l.trim(); }).filter(Boolean);
+  var added = 0;
+  lines.forEach(function(line) {
+    // Support comma-separated (legacy) OR space-separated (new)
+    var parsed;
+    if (line.indexOf(',') !== -1) {
+      var parts = line.split(',').map(function(p){ return p.trim(); });
+      parsed = { code: parts[0]||'', days: parts[1]||'', time: parts[2]||'' };
+    } else {
+      parsed = parsePasteLine(line);
+    }
+    if (parsed.code) { addRow(parsed.code, parsed.days, parsed.time); added++; }
+  });
+  if (added) {
+    document.getElementById('pasteBlock').value = '';
+    setStatus(added + ' course' + (added!==1?'s':'') + ' imported');
+  }
+}
+
+function getRows() {
+  var rows = document.querySelectorAll('#courseBody tr');
+  var out = [];
+  rows.forEach(function(tr) {
+    var id = tr.id.replace('row-','');
+    var inputs = tr.querySelectorAll('input[type="text"]');
+    var code = inputs[0] ? inputs[0].value.trim() : '';
+    var days = inputs[1] ? inputs[1].value.trim() : '';
+    var time = inputs[2] ? inputs[2].value.trim() : '';
+    var teamR = tr.querySelector('input[name="team_' + id + '"]:checked');
+    var teamType = teamR ? teamR.value : 'solo';
+    var pi = document.getElementById('parts_' + id);
+    var parts = pi ? (parseInt(pi.value)||2) : 2;
+    var locR = tr.querySelector('input[name="loc_' + id + '"]:checked');
+    var locVal = locR ? locR.value : '';
+    if (code) out.push({ code:code, days:days, time:time, teamType:teamType, parts:parts, loc:locVal });
+  });
+  return out;
+}
+
+// Time math
+function toMin(h, m, ap) {
+  var hrs = +h;
+  if (ap && ap.toLowerCase()==='pm' && hrs!==12) hrs+=12;
+  if (ap && ap.toLowerCase()==='am' && hrs===12) hrs=0;
+  return hrs*60+(+m||0);
+}
+
+function fmtMin(total) {
+  var m = ((total%1440)+1440)%1440;
+  var h = Math.floor(m/60), mn = m%60;
+  var ap = h<12?'am':'pm';
+  var dh = h%12===0?12:h%12;
+  return dh+(mn?':'+String(mn).padStart(2,'0'):'')+ap;
+}
+
+function parseTime(str) {
+  // Handles: 6pm, 6PM, 6p, 6 pm, 6 p, 6:00pm, 6:00 PM, 6:00p, 6:30am, etc.
+  var rx = /(\d{1,2})(?::(\d{2}))?\s*(am?|pm?)/i;
+  var m = rx.exec(str.trim());
+  if (!m) return null;
+  var ap = m[3].toLowerCase();
+  if (ap === 'p') ap = 'pm';
+  if (ap === 'a') ap = 'am';
+  return toMin(m[1], m[2]||'0', ap);
+}
+
+function parseRange(str) {
+  var sepRx = /(?<=[\d\s]|am?|pm?)\s*[-\u2013]\s*/i;
+  var idx = str.search(sepRx);
+  if (idx < 0) {
+    idx = str.indexOf('-');
+    if (idx < 0) return null;
+  }
+  var startStr = str.slice(0, idx).trim();
+  var endStr   = str.slice(idx).replace(/^\s*[-\u2013]\s*/, '').trim();
+  if (!/(am?|pm?)/i.test(startStr) && /(am?|pm?)/i.test(endStr)) {
+    var ap = endStr.match(/(am?|pm?)/i)[0];
+    startStr = startStr + ap;
+  }
+  var start = parseTime(startStr);
+  var end   = parseTime(endStr);
+  if (start === null || end === null) return null;
+  return { start: start, end: end };
+}
+
+function convertRange(str, off) {
+  if (!off) return str;
+  var r = parseRange(str);
+  if (!r) return str;
+  return fmtMin(r.start - off*60) + '-' + fmtMin(r.end - off*60);
+}
+
+function roundToQuarter(minutes) {
+  return Math.round(minutes / 15) * 15;
+}
+
+function splitTime(str, n, off) {
+  var r = parseRange(str);
+  if (!r) {
+    var c = convertRange(str, off);
+    var arr = [];
+    for (var i=0;i<n;i++) arr.push(c);
+    return arr;
+  }
+  var s = r.start - off*60, e = r.end - off*60;
+  var total = e - s;
+  var exact = total / n;
+  var chunk = roundToQuarter(exact);
+  var slices = [];
+  var cursor = s;
+  for (var i=0;i<n;i++) {
+    var sliceLen = (i === n-1) ? (e - cursor) : chunk;
+    slices.push(fmtMin(cursor) + '-' + fmtMin(cursor + sliceLen));
+    cursor += sliceLen;
+  }
+  return slices;
+}
+
+function buildSuffix(teamLabel, locVal) {
+  var parts = [];
+  if (teamLabel) parts.push(teamLabel);
+  if (locVal)    parts.push(locVal);
+  return parts.length ? ' (' + parts.join(') (') + ')' : '';
+}
+
+function generate() {
+  document.getElementById('errorArea').style.display = 'none';
+  document.getElementById('resultSection').style.display = 'none';
+
+  var client  = document.getElementById('clientName').value.trim();
+  var student = document.getElementById('studentName').value.trim();
+  var term    = document.getElementById('termName').value.trim();
+  var offset  = parseInt(document.getElementById('sourceTz').value);
+  var courses = getRows();
+
+  if (!client)         { showError('Enter a client name.'); return; }
+  if (!student)        { showError('Enter the student\'s first name.'); return; }
+  if (!term)           { showError('Enter the term (e.g. SP 26).'); return; }
+  if (!courses.length) { showError('Add at least one course.'); return; }
+
+  var masterLines = [], wiwLines = [], timeLines = [];
+  var warnings = [];
+
+  courses.forEach(function(c) {
+    // Warn if solo shift is longer than 4 hours (240 min)
+    if (c.teamType === 'solo' && c.time) {
+      var r = parseRange(c.time);
+      if (r && (r.end - r.start) > 90) {
+        warnings.push(c.code + ': Solo shift is over 1.5 hours. Consider teaming.');
+      }
+    }
+  });
+
+  courses.forEach(function(c) {
+    var daysPart = c.days ? ' (' + c.days + ')' : '';
+    var timeConverted = c.time ? convertRange(c.time, offset) : '';
+    var tzLabel = (offset!==0 && timeConverted && timeConverted!==c.time) ? ' PT' : '';
+    var base = student + ' - ' + c.code + daysPart;
+
+    if (c.teamType === 'solo') {
+      masterLines.push([client, student, term, c.code].join('\t'));
+      var name = base + buildSuffix('', c.loc);
+      wiwLines.push(name);
+      timeLines.push(timeConverted ? name + '    ' + timeConverted + tzLabel : name);
+
+    } else if (c.teamType === 'team') {
+      masterLines.push([client, student, term, c.code].join('\t'));
+      var name = base + buildSuffix('Teamed', c.loc);
+      wiwLines.push(name);
+      timeLines.push(timeConverted ? name + '    ' + timeConverted + tzLabel : name);
+
+    } else if (c.teamType === 'seq') {
+      var n = c.parts || 2;
+      var slices = c.time ? splitTime(c.time, n, offset) : [];
+      for (var i=1; i<=n; i++) {
+        masterLines.push([client, student, term, c.code].join('\t'));
+        var name = base + buildSuffix('Sequential team ' + i + '/' + n, c.loc);
+        var t = slices[i-1] || timeConverted;
+        wiwLines.push(name);
+        timeLines.push(t ? name + '    ' + t + tzLabel : name);
+      }
+    }
+  });
+
+  document.getElementById('masterOut').value = masterLines.join('\n');
+  document.getElementById('wiwOut').value = wiwLines.join('\n');
+  document.getElementById('timeOut').value = timeLines.join('\n');
+  document.getElementById('resultSection').style.display = 'block';
+  setStatus(courses.length + ' course' + (courses.length!==1?'s':'') + ' processed');
+
+  var warnEl = document.getElementById('warningArea');
+  if (warnings.length) {
+    warnEl.innerHTML = warnings.map(function(w) {
+      return '<div style="display:flex;align-items:flex-start;gap:8px;"><span style="font-size:16px;">⚠️</span><span>' + w + '</span></div>';
+    }).join('');
+    warnEl.style.display = 'block';
+  } else {
+    warnEl.style.display = 'none';
+    warnEl.innerHTML = '';
+  }
+
+  document.getElementById('resultSection').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function copyOut(id) {
+  var el = document.getElementById(id);
+  navigator.clipboard.writeText(el.value).then(function() {
+    setStatus('Copied to clipboard');
+    setTimeout(function(){ setStatus(''); }, 2000);
+  });
+}
+
+function clearAll() {
+  ['clientName','studentName','termName','pasteBlock'].forEach(function(id){
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('sourceTz').value = '0';
+  document.getElementById('courseBody').innerHTML = '';
+  rowCount = 0;
+  document.getElementById('resultSection').style.display = 'none';
+  document.getElementById('errorArea').style.display = 'none';
+  setStatus('');
+}
+
+function showError(msg) {
+  var el = document.getElementById('errorArea');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function setStatus(msg) { document.getElementById('statusMsg').textContent = msg; }
+
+function esc(str) {
+  return (str||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+</script>
+
+<div style="text-align:center; margin-top:32px; font-family:'Comfortaa',sans-serif; font-size:11px; color:#7a9a8a; letter-spacing:0.04em;">
+  Authorized Use Only &mdash; Intellitext LLC 2026 &mdash; V 1.5
+</div>
 
 </body>
 </html>

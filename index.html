@@ -196,7 +196,7 @@
     <div class="section-label">Courses</div>
 
     <div class="field" style="margin-bottom:10px;">
-      <label>Paste course block &mdash; one per line: Course code&nbsp;&nbsp;Days&nbsp;&nbsp;Start-End time</label>
+      <label>Paste course block &mdash; one per line (any order: Course code, Days, Start-End time)</label>
       <div class="paste-row">
         <textarea id="pasteBlock" placeholder="FILM 300.1001 W 6:00-9:00pm&#10;FILM 315.1001 T 10:00-12:45pm&#10;FILM 417.1002 W 10:00-12:45pm"></textarea>
         <div class="paste-actions">
@@ -205,10 +205,11 @@
         </div>
       </div>
       <div class="format-hint">
-        Format: <span style="font-family:'Courier New',monospace;font-size:11.5px;background:#d4dae6;padding:1px 5px;border-radius:4px;color:#1a1a1a;">Course code&nbsp; Days&nbsp; Start-End time</span>
+        Any order works &mdash; time range and days are detected by pattern:
         <div class="example">FILM 300.1001 W 6:00-9:00pm
-MATH 251.105 MWF 9-9:50am
-NURS 419.1002 TTh 1-2:15pm</div>
+W 6:00-9:00pm FILM 300.1001
+NURS 419.1002 TTh 1-2:15pm
+1-2:15pm TTh NURS 419.1002</div>
       </div>
     </div>
 
@@ -347,11 +348,16 @@ function onTeamChange(id) {
 }
 
 function parsePasteLine(line) {
+  // Step 1: extract time range by pattern (most distinctive token)
   var timeRx = /\d{1,2}(?::\d{2})?\s*(?:am?|pm?)\s*[-\u2013]\s*\d{1,2}(?::\d{2})?\s*(?:am?|pm?)/i;
   var timeMatch = line.match(timeRx);
   var time = timeMatch ? timeMatch[0].trim() : '';
-  var rest = timeMatch ? line.slice(0, timeMatch.index).trim() : line.trim();
-  var daysRx = /\b((?:M(?:on)?|T(?:ue)?(?:s)?|W(?:ed)?|Th(?:u)?(?:r)?(?:s)?|F(?:ri)?|Sa(?:t)?|Su(?:n)?)+)\b/i;
+  var rest = timeMatch
+    ? (line.slice(0, timeMatch.index) + line.slice(timeMatch.index + timeMatch[0].length)).trim()
+    : line.trim();
+
+  // Step 2: extract days cluster from whatever remains
+  var daysRx = /\b((?:M(?:on)?|Tu(?:e)?(?:s)?|W(?:ed)?|Th(?:u)?(?:r)?(?:s)?|F(?:ri)?|Sa(?:t)?|Su(?:n)?)+)\b/i;
   var daysMatch = null, dm;
   var testRx = new RegExp(daysRx.source, 'gi');
   while ((dm = testRx.exec(rest)) !== null) { daysMatch = dm; }
@@ -360,6 +366,10 @@ function parsePasteLine(line) {
     days = daysMatch[0].trim();
     code = (rest.slice(0, daysMatch.index) + rest.slice(daysMatch.index + daysMatch[0].length)).trim();
   }
+
+  // Step 3: clean up any stray leading/trailing punctuation from code
+  code = code.replace(/^[\s,;|]+|[\s,;|]+$/g, '').trim();
+
   return { code: code, days: days, time: time };
 }
 

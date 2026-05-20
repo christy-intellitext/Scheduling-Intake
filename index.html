@@ -4,358 +4,171 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Intellitext Schedule Intake</title>
-<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABCGlDQ1BJQ0MgUHJvZmlsZQAAeJxjYGA8wQAELAYMDLl5JUVB7k4KEZFRCuwPGBiBEAwSk4sLGHADoKpv1yBqL+viUYcLcKakFicD6Q9ArFIEtBxopAiQLZIOYWuA2EkQtg2IXV5SUAJkB4DYRSFBzkB2CpCtkY7ETkJiJxcUgdT3ANk2uTmlyQh3M/Ck5oUGA2kOIJZhKGYIYnBncAL5H6IkfxEDg8VXBgbmCQixpJkMDNtbGRgkbiHEVBYwMPC3MDBsO48QQ4RJQWJRIliIBYiZ0tIYGD4tZ2DgjWRgEL7AwMAVDQsIHG5TALvNnSEfCNMZchhSgSKeDHkMyQx6QJYRgwGDIYMZAKbWPz9HbOBQAAAQoElEQVR4nO1bfXBcV3X/nXvve2/f7mrXliz5Q4o/JFn2SBMTMDgyMVmHJCRpQ1wn2W0GDEkY2jLho0xDCZSWF8FAp0lmWj5bhmGGxCGABZnifJkMxtomFJzGDQmxcG3k2PqwbMX6Xku77717T//YVWI7sizJisUw+c28GWnfe/ee87vnnnvOufcBb+EtvIV5As23APMFSqVSar6FmB+k03Liz0RjY3nFmjVl8ykOAIiL0ovnCTATWls1gEjD+66/p3LRom9xMknwPIE/4elA6dNGvf6qqz7QdOON+9fdcguv3LTpcgBnWMWfFk5TrLZ50xVrb7ghe+nNN/Pbb7uNG6699rHiI/Ov/JvijFKplMq2toYLa2uTVXWr71Vu5FPKsYUOAj/0fTv0/R8AoL6+vnk3/bkWgMAMEHHtxve8N1Ke+LYVi63RQcBsjBZSqrBQyI12d6/d2NBwvLWvj7B5s0m3t59BRraqitHaagDwHMs3icBzhXRalpycWH311V904nFPWBZ0GIYEKDAbYVnCHx196cDPf/626TTpeZ5oa2sT2WzWADBzJutpmBsCUimFbDZcUl9fmaxv+EGkLHatDgLDzCCi11caIrDW+TDvP0lEERJwAQCMMQb3GWN6OOQOnfdfHjzedWjw8OHhiVfT6bRsBVAiec5wwQSkUimVzWbDmvXNlyYWL/qpFY+uDn2/OOqTdUgEoSa5RQQwg5lhggA61CfY6Bd0EDwxnsvt6v7Nb/4AAGAmZDJiroi4IAImlF+1ceO73IqKpyzXrQh9PySiKZ0rM79ReKLX5jsBkoQgIYuLRJDPj5swfCIYG/teRza7CyhZxBz4iVkTMKH8yubmVKyycqe07YQOQ01Ec7O0MTMDBkQsiJRQCiYMEeb9Pf7w6Jc7/vu/9gAoBlktLbP2D7MjoOTwVjU3b3CrqvYoy4rqMDRnzPe5BTOzISKSliV0EMAfG/uPEwcO/MNwZ+fgxGDMpuGZE1BivPqyy1Yna2p+pRynck5H/jxgZk1EJG1b+KdO/SE/MPCBV3796/+ZLQkzHTHyAFSsWVNWtmTJzyzXvajKA0CpLxEWCqHluvXRyqq2uiuvzGSz2XA2WeaMLGCC5YZrrnnULS/fGhYK53V4byaYWQspJQwjd/LVD73y7LMPz9QSpm0B6XRaZrPZsP7KK+9yFyzcGvp+MJ/KA0VrMFobCOhoRcWDKze+57psNhvOJMGangV4nuB77+Xl73xnbWLpst8K23JZawGimfsQBjPYnL7sFX9nImBWbTKzkUpRUCgMDfX2Xtb7/PNdpXbOuzpMxwII7e1EROxWVHxbuZG40RozFZSZDZg1SUHKtqWybXXWJUlKArNm5hkta0QkdBAY23UXllVUPAQiTqfT05Jveg8RYf3Wmz5UgHwIbDQzZuL0uJQHSAAI8vkB1vp/TWgOEHCq+IhJCCnrScq3q4i7CASYINAoLqvTJpqBUCqlcidP3nG4re3BUrA0ZcR43sY/9+A3Kn76zR1N0WUVP/Y1L87n8hxLusK8NkgEIc7RDDOjFNEF4+P7wnH/myMnTzx54qWX+iZ7fGlDw6JYTc31ynE/Ycfcy1lrsDE8bWtjNkIp8sfGunK/+93a7u7u/MSdc70ylRMjAFgUdZcXSF6ltFkspWChhNCBhuM6yA2NYUFVGcbH8m+UkZlJSphQ6/GRkX86tHv3fQCKo+F5ItXWdsb027x5s2lpaTmJgwcfBvDI6quu+TunLPoVUspmradHApHQYajtaHS5U1d3K7q7t59vVZjKBzA8jz6T/ugLAcz7VtTVUHnVAk6UxxCNu1haU4n4AheWVGB+A8FMQhgT6jA/OHDLod27/9nzPE6lUgrr11toaadsNmuyALLZrM5ms2FLSzuhVDH2PA+H9vzigdyrr95kwnCcpOTJOjknD0KwjETuBIrETvnsee5x/WWXVVo11Qds1y0f7htlx7ZIRSVCXwMMFPIBEhUxmNCc3poWQsrRV/s++sozz3yvMZ2221tbA8wgcSm949du2nRbrLLyh6UEajq+h4kEhX5hfLS7e3X3iy/2TOgy2cPntoB0WgCAccsulcouN6E2tqMoNzKGIB+CNVBemUTZAhcmNKBSL2DWyrJkYTS36zTlfcAjNDbayfoNH0nUNV+fWN28YeHaTX9VXr8hgfp6Z2Ht5Tec3n17a6u/fv166/Czz/4oyOX+UylLCpAWIEgiSJQuEhD8+v+CiQSzjkRc10kk3gkAqVTqnMSd0wek+vooC8CO2pdHbBthEJh4PCIitoVCPsDo0BgiEQVJBGVJMDMK4wFyI3ksWmIjODX6jQlFamqa3e7ulnG0ww/rLj8sCZ8mnz/NjlmvJXcm89V7ZTTIfec737FOLjBbjWZ3KDz1k84Xjpl9+/YFYwOjDyyoqPiLvO+TshSMNpBSggGwNmAirKitBhHh6OEeSClZWgqB614G4GfnHOSpCKiqqmIAcGz7UlspKGaMDo9jdHgcyfIolBQ4NZiHMQaWLZFIuhgdGOdCPqSB3uHxk68WTiYbNqwCi78dJetUsr6ZtQj+LXdwb1ui/vIPDh/deyRZv+E5IhETEf+judFCbGChthw39uHCeMFKItpQt3r1A1/50b+/Qxt8uOvosf7xcb+8t7OXl9dWU/tvD0JKiYZ1qzEyOIKV9TUAA/F4BF0dPdBMcJSqmUp5YBqBkK2Ua0sBSUBlZRzRqI1gPAQxUL0siZUrF0H7BtCM6uokJ5JRsWRJrHvk0L7nwPLvhdHfHT74zBcAelFq624ABJADgAhUxixzg//36weibqTx85m7flkYzz8sBP30ix/4+BecRePEEJ8c7B379K+efPZQWTxKlYsWcpj3saapDmsaa4FQo6ejGyc6T6Cvpw8dL3UAhslREpZSS04fzFkRYBEFjpCYuCwpIIVAoiyCiKVgk0A0YkEwwRISSgjYxeRQAkhCqHULGt69DeAUYJ4uEgANgEFkwFx0HWROAQCBJEmhd+zYIcNcJEbEkaW1yT97x6a3L7NtC/ncGL3y8mEsW74Y5ZULcPjlDsSjLpQQkESIWBZsqWALCVuIBAA0NjbOnICJMrVgOuYoCVtK2EpCoNgRMcEq/UYgKCHgKEVBEMKx1OI9HsgYwIAc0ujQUC3DHc/tQX29BVMsnBQjyiIBILIAwBD7JtDLM5mMHhvMnxRSxgf7Bi1/9FR558sdGBsYwcqG5RgbyiHI+6hZuQxCG0giRKMuhDGwYNhREoqoGwDazoo5ZmQBAuaYJQRsKWAJAccqKm1bRYuwpYCjiiOfjEdoYTxieo7nEtseffdnAXwLMGug5DpBwdUABJJJA+LBotJ8iiAKAMAGJ9PptLSG5S7DJvKvux75yoLF1mYS8tsgXLtgUbmVXJjgZLKMlq5Yip7fH8Xxg12oXrUMyWQZRnr7YVsKjRuaULmkEhYEJNB5Pv3O6wRNodAuGZDKImZg+eKFry2okghgYMWy8qI+mlB3ySIONDBQZm/75c5Hv7riban23Li/BFqNATDYt88sXJH63AiAYWv0QVRWGnQAQ779+dbWVtPa2joK4J77f/bQqkIY+N7NH+m5+Y7b76lcXOWEp/LaEkL2/O4VWCTA2qBn/xHYSsEEIY4f6IRbFoUJNSlB0L7/4vkIOG8gtHb9+qVNTU2HotFoTGvNNElIekaUwYCUQgshRFdn5z27H3/8fkGAmX7tljzPo5ZSofPaLTfetWxpzbe01hpEkkqkFycRgQ2D6PXk1ISahRLkFwpBe/vvG17cu/cIipY+aUQ4ZSjseZ44sG9fLwfBM67jsC2FtoXA2Zc18bcUsJWABIQE+JLq6vuuf//7bzdcFNDzPFXqczLiqaS8/NKXvmQA4Po/v+m2msXVX7elNI5SIqIUHCnhKAmbJGxRnH62lLBKcji2ZeKRKJsgfO7FvXuPeMXt93OGw1MmGBOJxA033viXK2trf2S01mDIN75Fb2iMmVlKycxGDPT33/fjX/zwy3gVudI9am1tFfv37ycAaGpq4nQ6bej1Iombue22z1VUVHxRSsXFwT93MnTWDa0sJV/p6Lh9586dD50vGTpfhkWl7S3rjjvu+H15RcWqQqHAQpyr/D1JRkjElm2LkZGRP5zK5b7b09OzI5vNHpns7SuuuGL5ihUrbonG43+dTCTWhkHAxpgplT+rO2PbNg0ODvY8/fTTDV1dXfnSq7NKhwGAM5mMBOAPDw+3VFSUPyiF0JhuLbHYOwW+rxNlZfXJROJfEonEvXV1de1hGB4iol4ukrTUsqwGpdTaeDweY2YEvq8ByJkUnojIAFBDQ0Nf7u7uHi/JfmEFEeC1bSi9bdu2Xyxbtuzq8fHxGVeDSxsbRgihlFIgotccF5f2BMMwhDFGFzmZ2SYLM+tIJCKPHz++Z/v27e+dTjUImOYBicbGRmZm2rhx4+2u676QSCQqC4WCEUJMW8iSQkJrzVprxhsdkyg+RjMadaDob5RSGB0dLfT09HyCiKaM/s6Qa7qdTDB63XXXba6vr3/atm0VBAHPhIQ3EaHjOKqjo+OeRx999L7pjj4wy42Rm2666dZLLrnkh47jqCAILurO0Nlg5tB1XdXb27tr+/btN+zYsUNmMplp7xrPaPSy2WzoeZ7auXPnTzo7O7fm8/mxSCQimXlWG5MXCmbWjuOogYGBo/v27fsgM1Mmk2HMoPI0Y/NtaWkJPc9Tjz322OMHDx5MDQ0NveS6riIinnTf/02CMcZYliVGR0dHOjo6trS3tw9kMpkpg57JMOvzAafNs/i2bdu+mkwmPxmNRlEoFExxax9iuuv3TGGMMbZti3w+Hxw+fPiGXbt27Z7JvD8ds3Zgra2tuhRm5h5++OFPHTly5Mr+/v6fAxCRSERKKQlAyMWdnjk77VUye5HP5/NdXV0379q1a7fneWo2ygNzc0iK0um0mBBgy5YtV1dUVNzlOM61sVisjIigtYbWmpnZnEUGEVHpMEhxCZyqI2YOHcdRuVxu4OjRo+mnnnrql57nqZaWlln7oDkz0ZI1YCKL27hx44qVK1de77rujZZlvcuyrMWO40CI4v7nBA+lUBsA4Pv+pOX/0jNBJBKxBgYGXj506FA6m80euJCTIROY8zmaTqdlY2Mjt5x2bqe+vj7R2NjYEIlEGm3bXqWUWgEgTkRlUsp4EAR9RBSNxWLXKKXU6SQwsxFCwHEc0dfX98SePXu2HT16dGgulAfe3FPaIpVKidKW17Q885133nmovLy83vd9Q0SCmUPbtpXv++jv77//kUce+SxwhgO+YFyss7rkeR61tbWJzZs3AyimwPv37+f29nZKp9P42te+Vt3U1NQei8ViYRhqIQQ5jiMGBwePHDt27ONPPPHEk6UcAZjDI7QX64QHt7S0MACTzWbPuOF5nspkMnrr1q1Xx2KxmDGm4DiOUygUcOzYse8+//zznz9w4EC/53mKiOY84Jr3T1fa29sZAMfj8Q9FIhEUCgVncHDwNydOnPjHxx9/fDdQNPkL8fR/tJj4XmDLli2b7777bv7Yxz52MJPJ/A1K8cmOHTsk3uRpOp8WQI2Njdzc3FwupfxMf3//F77//e9/HUCOiHDrrbfKTCZz0ULr+QABwKZNmxauW7euauLHP4avSOYFpYrxvH9BMh947WjBW3gLb+Gi4/8Btfiv+7dEKTUAAAAASUVORK5CYII=">
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0Ij4KICA8dGV4dCB5PSI1MiIgZm9udC1zaXplPSI1MiIgZm9udC1mYW1pbHk9IkFwcGxlIENvbG9yIEVtb2ppLCBTZWdvZSBVSSBFbW9qaSwgTm90byBDb2xvciBFbW9qaSwgc2VyaWYiPvCfk4U8L3RleHQ+Cjwvc3ZnPg==">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: #eef0f4;
-    padding: 40px 20px 80px;
-    color: #1a1a1a;
-    min-height: 100vh;
-  }
-
-  .form-container {
-    background: #fff;
-    max-width: 1020px;
-    margin: 0 auto;
-    padding: 30px;
-    border-radius: 10px;
-    border: 1px solid #d4dae6;
-  }
-
-  .logo {
-    display: block;
-    margin: 0 auto 10px;
-    max-width: 180px;
-    opacity: 0.92;
-  }
-
-  .page-title {
-    text-align: center;
-    font-size: 18px;
-    font-weight: 700;
-    color: #1e3a5f;
-    margin-bottom: 28px;
-    letter-spacing: -0.01em;
-  }
-
-  .section-label {
-    font-size: 11px;
-    font-weight: 700;
-    color: #1e3a5f;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 12px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid #d4dae6;
-  }
-
-  .card {
-    background: #f8f9fc;
-    border: 1px solid #d4dae6;
-    border-radius: 10px;
-    padding: 20px 22px;
-    margin-bottom: 14px;
-  }
-
-  .fields-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 12px;
-  }
-
+  body { font-family: 'DM Sans', sans-serif; background: #eef0f4; padding: 40px 20px 80px; color: #1a1a1a; min-height: 100vh; }
+  .form-container { background: #fff; max-width: 1020px; margin: 0 auto; padding: 30px; border-radius: 10px; border: 1px solid #d4dae6; }
+  .logo { display: block; margin: 0 auto 10px; max-width: 180px; opacity: 0.92; }
+  .page-title { text-align: center; font-size: 18px; font-weight: 700; color: #1e3a5f; margin-bottom: 28px; letter-spacing: -0.01em; }
+  .section-label { font-size: 11px; font-weight: 700; color: #1e3a5f; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid #d4dae6; }
+  .card { background: #f8f9fc; border: 1px solid #d4dae6; border-radius: 10px; padding: 20px 22px; margin-bottom: 14px; }
+  .fields-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
   @media (max-width: 640px) { .fields-row { grid-template-columns: 1fr 1fr; } }
-
-  .field label {
-    display: block;
-    font-size: 11px;
-    font-weight: 600;
-    color: #6b7e99;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 5px;
-  }
-
-  input[type="text"],
-  input[type="number"],
-  select,
-  textarea {
-    font-family: 'DM Sans', sans-serif;
-    width: 100%;
-    padding: 8px 10px;
-    border: 1px solid #d4dae6;
-    border-radius: 6px;
-    font-size: 13px;
-    color: #1a1a1a;
-    background: #fff;
-    transition: border-color 0.15s;
-    appearance: none;
-  }
-
-  input:focus, select:focus, textarea:focus {
-    outline: none;
-    border-color: #1e3a5f;
-    background: #fff;
-  }
-
+  .field label { display: block; font-size: 11px; font-weight: 600; color: #6b7e99; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; }
+  input[type="text"], input[type="number"], select, textarea { font-family: 'DM Sans', sans-serif; width: 100%; padding: 8px 10px; border: 1px solid #d4dae6; border-radius: 6px; font-size: 13px; color: #1a1a1a; background: #fff; transition: border-color 0.15s; appearance: none; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: #1e3a5f; background: #fff; }
   input::placeholder, textarea::placeholder { color: #a0aec0; }
-
-  textarea {
-    font-size: 13px;
-    line-height: 1.7;
-    resize: vertical;
-    height: 130px;
-  }
-
-  /* Paste area */
+  textarea { font-size: 13px; line-height: 1.7; resize: vertical; height: 130px; }
   .paste-row { display: flex; gap: 10px; align-items: flex-start; }
   .paste-row textarea { flex: 1; }
   .paste-actions { display: flex; flex-direction: column; gap: 8px; padding-top: 2px; }
-
-  .format-hint {
-    margin-top: 10px;
-    padding: 11px 14px;
-    background: #eef0f4;
-    border-radius: 6px;
-    font-size: 12px;
-    color: #6b7e99;
-    line-height: 1.7;
-  }
-  .format-hint .example {
-    margin-top: 6px;
-    font-family: 'Courier New', monospace;
-    font-size: 11.5px;
-    color: #1e3a5f;
-    white-space: pre;
-    line-height: 1.9;
-  }
-
-  /* Course table */
+  .format-hint { margin-top: 10px; padding: 11px 14px; background: #eef0f4; border-radius: 6px; font-size: 12px; color: #6b7e99; line-height: 1.7; }
+  .format-hint .example { margin-top: 6px; font-family: 'Courier New', monospace; font-size: 11.5px; color: #1e3a5f; white-space: pre; line-height: 1.9; }
   .course-table-wrap { overflow-x: auto; margin-top: 4px; }
-
-  .course-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 12.5px;
-  }
-
-  .course-table thead th {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 10px;
-    font-weight: 700;
-    color: #6b7e99;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    padding: 0 3px 8px;
-    text-align: left;
-    white-space: nowrap;
-  }
-
+  .course-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .course-table thead th { font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 700; color: #6b7e99; text-transform: uppercase; letter-spacing: 0.04em; padding: 0 3px 8px; text-align: left; white-space: nowrap; }
   .course-table tbody tr { vertical-align: middle; }
   .course-table tbody td { padding: 3px 3px; }
-
-  .course-table input[type="text"],
-  .course-table input[type="number"],
-  .course-table select {
-    padding: 6px 6px;
-    font-size: 12px;
-  }
-
-  /* Toggle pill buttons */
-  .toggle-group {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 3px;
-  }
-
-  .toggle-group input[type="radio"],
-  .toggle-group input[type="checkbox"] { display: none; }
-
-  .toggle-group label {
-    font-family: 'DM Sans', sans-serif;
-    display: inline-block;
-    padding: 4px 7px;
-    font-size: 10.5px;
-    font-weight: 600;
-    border: 1px solid #d4dae6;
-    border-radius: 5px;
-    cursor: pointer;
-    color: #6b7e99;
-    background: #f8f9fc;
-    transition: all 0.12s;
-    white-space: nowrap;
-    user-select: none;
-  }
-
-  .toggle-group input[type="radio"]:checked + label,
-  .toggle-group input[type="checkbox"]:checked + label {
-    background: #1e3a5f;
-    color: #fff;
-    border-color: #1e3a5f;
-  }
-
-  /* Tighter labels specifically in the location column */
-  .col-loc .toggle-group label {
-    padding: 3px 5px;
-    font-size: 9.5px;
-    letter-spacing: -0.02em;
-  }
-
+  .course-table input[type="text"], .course-table input[type="number"], .course-table select { padding: 6px 6px; font-size: 12px; }
+  .toggle-group { display: flex; flex-wrap: nowrap; gap: 3px; }
+  .toggle-group input[type="radio"], .toggle-group input[type="checkbox"] { display: none; }
+  .toggle-group label { font-family: 'DM Sans', sans-serif; display: inline-block; padding: 4px 7px; font-size: 10.5px; font-weight: 600; border: 1px solid #d4dae6; border-radius: 5px; cursor: pointer; color: #6b7e99; background: #f8f9fc; transition: all 0.12s; white-space: nowrap; user-select: none; }
+  .toggle-group input[type="radio"]:checked + label, .toggle-group input[type="checkbox"]:checked + label { background: #1e3a5f; color: #fff; border-color: #1e3a5f; }
+  .col-loc .toggle-group label { padding: 3px 5px; font-size: 9.5px; letter-spacing: -0.02em; }
   .parts-wrap { display: flex; align-items: center; gap: 4px; }
-  .parts-wrap input[type="number"] {
-    width: 52px;
-    opacity: 0.3;
-    pointer-events: none;
-    transition: opacity 0.15s;
-  }
+  .parts-wrap input[type="number"] { width: 52px; opacity: 0.3; pointer-events: none; transition: opacity 0.15s; }
   .parts-wrap input[type="number"].active { opacity: 1; pointer-events: auto; }
   .parts-wrap span { font-size: 11px; color: #6b7e99; }
-
-  .remove-btn {
-    width: 28px; height: 28px;
-    border: 1px solid #d4dae6;
-    border-radius: 5px;
-    background: #f8f9fc;
-    color: #6b7e99;
-    font-size: 16px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.12s;
-  }
+  .remove-btn { width: 28px; height: 28px; border: 1px solid #d4dae6; border-radius: 5px; background: #f8f9fc; color: #6b7e99; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.12s; }
   .remove-btn:hover { background: #fef2f2; border-color: #fca5a5; color: #dc2626; }
-
-  .add-btn {
-    font-family: 'DM Sans', sans-serif;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 12px;
-    padding: 7px 14px;
-    border: 1px dashed #d4dae6;
-    border-radius: 6px;
-    background: transparent;
-    color: #6b7e99;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.12s;
-  }
+  .add-btn { font-family: 'DM Sans', sans-serif; display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; padding: 7px 14px; border: 1px dashed #d4dae6; border-radius: 6px; background: transparent; color: #6b7e99; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.12s; }
   .add-btn:hover { border-color: #1e3a5f; color: #1e3a5f; background: #eef0f4; }
-
   .divider { border: none; border-top: 1px solid #d4dae6; margin: 16px 0; }
-
-  /* Buttons */
-  .btn-row {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-  }
-
-  button {
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer;
-    transition: all 0.12s;
-  }
-
-  .btn {
-    padding: 9px 22px;
-    border-radius: 6px;
-    font-size: 13px;
-    font-weight: 600;
-    border: 1px solid #d4dae6;
-    background: #fff;
-    color: #1e3a5f;
-  }
+  .btn-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 20px; }
+  button { font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.12s; }
+  .btn { padding: 9px 22px; border-radius: 6px; font-size: 13px; font-weight: 600; border: 1px solid #d4dae6; background: #fff; color: #1e3a5f; }
   .btn:hover { background: #eef0f4; border-color: #1e3a5f; }
   .btn:active { transform: scale(0.98); }
-
-  .btn-primary {
-    background: #1e3a5f;
-    color: #fff;
-    border-color: #1e3a5f;
-  }
+  .btn-primary { background: #1e3a5f; color: #fff; border-color: #1e3a5f; }
   .btn-primary:hover { background: #162d4a; border-color: #162d4a; }
   .btn-sm { padding: 5px 12px; font-size: 12px; }
-
   #statusMsg { font-size: 13px; color: #6b7e99; }
-
-  /* Output */
   .result-section { display: none; }
-
-  .output-block {
-    border: 1px solid #d4dae6;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 12px;
-  }
-
-  .output-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 14px;
-    background: #eef0f4;
-    border-bottom: 1px solid #d4dae6;
-  }
-
+  .output-block { border: 1px solid #d4dae6; border-radius: 10px; overflow: hidden; margin-bottom: 12px; }
+  .output-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #eef0f4; border-bottom: 1px solid #d4dae6; }
   .output-label { font-size: 12px; font-weight: 700; color: #1e3a5f; }
   .output-hint { font-size: 11px; color: #6b7e99; margin-top: 1px; }
-
-  .output-block textarea {
-    border: none;
-    border-radius: 0;
-    background: #fff;
-    height: 160px;
-    resize: vertical;
-    font-family: 'Courier New', monospace;
-    font-size: 12px;
-  }
+  .output-block textarea { border: none; border-radius: 0; background: #fff; height: 160px; resize: vertical; font-family: 'Courier New', monospace; font-size: 12px; }
   .output-block textarea:focus { outline: none; border: none; }
-
-  .error-box {
-    padding: 11px 16px;
-    background: #fef2f2;
-    border: 1px solid #fecaca;
-    border-radius: 8px;
-    font-size: 13px;
-    color: #dc2626;
-    margin-bottom: 12px;
-    display: none;
-  }
-
+  .error-box { padding: 11px 16px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; font-size: 13px; color: #dc2626; margin-bottom: 12px; display: none; }
   .hint { font-size: 11.5px; color: #6b7e99; margin-top: 8px; line-height: 1.5; }
-
-  /* Col widths */
-  .col-code  { min-width: 110px; width: 14%; }
-  .col-days  { min-width: 55px;  width: 6%; }
-  .col-time  { min-width: 110px; width: 12%; }
-  .col-team  { min-width: 165px; width: 18%; }
-  .col-parts { min-width: 70px;  width: 8%; }
-  .col-loc   { min-width: 0;     width: auto; }
-  .col-del   { min-width: 30px;  width: 30px; }
+  .col-code { min-width: 110px; width: 14%; }
+  .col-days { min-width: 55px; width: 6%; }
+  .col-time { min-width: 110px; width: 12%; }
+  .col-team { min-width: 165px; width: 18%; }
+  .col-parts { min-width: 70px; width: 8%; }
+  .col-loc { min-width: 0; width: auto; }
+  .col-del { min-width: 30px; width: 30px; }
 </style>
 </head>
 <body>
+
+<datalist id="clientList">
+  <option value="AG Bell">
+  <option value="AIMS">
+  <option value="Alaska Pacific University">
+  <option value="Auburn School District">
+  <option value="Bellingham School District">
+  <option value="Bellingham Technical College">
+  <option value="Brentwood School District">
+  <option value="Business Client">
+  <option value="BYU">
+  <option value="Central School District 13J">
+  <option value="Cerritos College">
+  <option value="Cicero Public Schools">
+  <option value="Colorado School of Mines">
+  <option value="Colorado School of Mines - STAFF">
+  <option value="Cypress College">
+  <option value="Cyrano's Theatre Company">
+  <option value="Derrick Tuff">
+  <option value="Douglas College">
+  <option value="Dutch Coalition on Disability and Development">
+  <option value="Fontbonne University">
+  <option value="Fullerton College">
+  <option value="Fullerton College Staff">
+  <option value="GLOBO">
+  <option value="Great Basin College">
+  <option value="Hinsdale Township High School District 86">
+  <option value="Innovative Systems">
+  <option value="Inter-Tribal Disability Advocacy Council">
+  <option value="Kwantlen Polytechnic University">
+  <option value="Liliane Fonds">
+  <option value="Marshall University">
+  <option value="Martinez Unified School District">
+  <option value="MCC">
+  <option value="Metropolitan Interpreting Group, LLC">
+  <option value="Mitchell Hamline School of Law">
+  <option value="Museum of Science">
+  <option value="Northeast Community College">
+  <option value="Oak Park and River Forest High School">
+  <option value="Oregon Community Foundation">
+  <option value="Peppermill">
+  <option value="RIT">
+  <option value="RRCC">
+  <option value="Rutherford County Schools">
+  <option value="Saint Mary's College">
+  <option value="Salem-Keizer School District - Cummings Elementary">
+  <option value="Salem-Keizer School District - Roberts HS">
+  <option value="Salem-Keizer School District - Sprague HS">
+  <option value="Salem-Keizer School District - West Salem HS">
+  <option value="Salt Lake Community College">
+  <option value="San Ramon Valley Unified School District - Cal High">
+  <option value="San Ramon Valley Unified School District - DAHS">
+  <option value="San Ramon Valley Unified School District - DVHS">
+  <option value="San Ramon Valley Unified School District - MVHS">
+  <option value="Shorewood School District">
+  <option value="Spoken Heroes">
+  <option value="St. Louis Community College">
+  <option value="Travel Reimbursement">
+  <option value="U-46">
+  <option value="UAA">
+  <option value="UMBC">
+  <option value="UMD">
+  <option value="University of Alaska Southeast">
+  <option value="University of Findlay">
+  <option value="University of Oregon">
+  <option value="UNLV">
+  <option value="UNR">
+  <option value="UNR English Department">
+  <option value="UNR Event">
+  <option value="USBG">
+  <option value="USOR">
+  <option value="Utah Valley University">
+  <option value="UTK">
+  <option value="Walla Walla Community College">
+  <option value="Weber State">
+  <option value="Western Oregon University">
+  <option value="Westmoreland Intermediate Unit">
+  <option value="Whatcom Community College">
+  <option value="Whitworth University">
+  <option value="WVU">
+  <option value="WVUP">
+  <option value="Yum! Brands">
+</datalist>
 
 <div class="form-container">
 
   <img src="https://i.imgur.com/YkhiJRe.png" alt="Intellitext" class="logo">
   <div class="page-title">Schedule Intake</div>
 
-  <!-- Student & session -->
   <div class="card">
     <div class="section-label">Student &amp; session</div>
     <div class="fields-row">
       <div class="field">
         <label>Client</label>
-        <input type="text" id="clientName" placeholder="e.g. UNLV">
+        <input type="text" id="clientName" list="clientList" placeholder="Type to search…" autocomplete="off">
       </div>
       <div class="field">
         <label>Student first name</label>
@@ -379,7 +192,6 @@
     </div>
   </div>
 
-  <!-- Courses -->
   <div class="card">
     <div class="section-label">Courses</div>
 
@@ -449,7 +261,7 @@ NURS 419.1002 TTh 1-2:15pm</div>
       <div class="output-header">
         <div>
           <div class="output-label">WhenIWork job site names</div>
-          <div class="output-hint">One entry per shift &mdash; includes team labels and location notes</div>
+          <div class="output-hint">One entry per shift &mdash; includes team labels and location notes (no time)</div>
         </div>
         <button class="btn btn-sm" onclick="copyOut('wiwOut')">Copy</button>
       </div>
@@ -487,14 +299,12 @@ var LOCATION_OPTIONS = [
 function addRow(code, days, time) {
   rowCount++;
   var id = rowCount;
-
   var locHtml = '<div class="toggle-group">';
   LOCATION_OPTIONS.forEach(function(opt, i) {
     var rid = 'loc_' + id + '_' + i;
     var checked = i === 0 ? 'checked' : '';
-    locHtml +=
-      '<input type="radio" name="loc_' + id + '" id="' + rid + '" value="' + esc(opt.value) + '" ' + checked + '>' +
-      '<label for="' + rid + '">' + esc(opt.label) + '</label>';
+    locHtml += '<input type="radio" name="loc_' + id + '" id="' + rid + '" value="' + esc(opt.value) + '" ' + checked + '>' +
+               '<label for="' + rid + '">' + esc(opt.label) + '</label>';
   });
   locHtml += '</div>';
 
@@ -504,22 +314,17 @@ function addRow(code, days, time) {
     '<td class="col-code"><input type="text" placeholder="FILM 300.1001" value="' + esc(code||'') + '"></td>' +
     '<td class="col-days"><input type="text" placeholder="MW" value="' + esc(days||'') + '"></td>' +
     '<td class="col-time"><input type="text" placeholder="6:00-9:00pm" value="' + esc(time||'') + '"></td>' +
-    '<td class="col-team">' +
-      '<div class="toggle-group">' +
-        '<input type="radio" name="team_' + id + '" id="solo_' + id + '" value="solo" checked onchange="onTeamChange(' + id + ')">' +
-        '<label for="solo_' + id + '">Solo</label>' +
-        '<input type="radio" name="team_' + id + '" id="team_' + id + '" value="team" onchange="onTeamChange(' + id + ')">' +
-        '<label for="team_' + id + '">Teamed</label>' +
-        '<input type="radio" name="team_' + id + '" id="seq_' + id + '" value="seq" onchange="onTeamChange(' + id + ')">' +
-        '<label for="seq_' + id + '">Sequential</label>' +
-      '</div>' +
-    '</td>' +
-    '<td class="col-parts">' +
-      '<div class="parts-wrap">' +
-        '<input type="number" id="parts_' + id + '" value="2" min="2" max="6">' +
-        '<span>parts</span>' +
-      '</div>' +
-    '</td>' +
+    '<td class="col-team"><div class="toggle-group">' +
+      '<input type="radio" name="team_' + id + '" id="solo_' + id + '" value="solo" checked onchange="onTeamChange(' + id + ')">' +
+      '<label for="solo_' + id + '">Solo</label>' +
+      '<input type="radio" name="team_' + id + '" id="team_' + id + '" value="team" onchange="onTeamChange(' + id + ')">' +
+      '<label for="team_' + id + '">Teamed</label>' +
+      '<input type="radio" name="team_' + id + '" id="seq_' + id + '" value="seq" onchange="onTeamChange(' + id + ')">' +
+      '<label for="seq_' + id + '">Sequential</label>' +
+    '</div></td>' +
+    '<td class="col-parts"><div class="parts-wrap">' +
+      '<input type="number" id="parts_' + id + '" value="2" min="2" max="6"><span>parts</span>' +
+    '</div></td>' +
     '<td class="col-loc">' + locHtml + '</td>' +
     '<td class="col-del"><button class="remove-btn" onclick="removeRow(' + id + ')">&times;</button></td>';
 
@@ -546,20 +351,15 @@ function parsePasteLine(line) {
   var timeMatch = line.match(timeRx);
   var time = timeMatch ? timeMatch[0].trim() : '';
   var rest = timeMatch ? line.slice(0, timeMatch.index).trim() : line.trim();
-
   var daysRx = /\b((?:M(?:on)?|T(?:ue)?(?:s)?|W(?:ed)?|Th(?:u)?(?:r)?(?:s)?|F(?:ri)?|Sa(?:t)?|Su(?:n)?)+)\b/i;
-  var daysMatch = null;
-  var dm;
+  var daysMatch = null, dm;
   var testRx = new RegExp(daysRx.source, 'gi');
   while ((dm = testRx.exec(rest)) !== null) { daysMatch = dm; }
-
-  var days = '';
-  var code = rest;
+  var days = '', code = rest;
   if (daysMatch) {
     days = daysMatch[0].trim();
     code = (rest.slice(0, daysMatch.index) + rest.slice(daysMatch.index + daysMatch[0].length)).trim();
   }
-
   return { code: code, days: days, time: time };
 }
 
@@ -572,7 +372,7 @@ function importPaste() {
     var parsed;
     if (line.indexOf(',') !== -1) {
       var parts = line.split(',').map(function(p){ return p.trim(); });
-      parsed = { code: parts[0]||'', days: parts[1]||'', time: parts[2]||''};
+      parsed = { code: parts[0]||'', days: parts[1]||'', time: parts[2]||'' };
     } else {
       parsed = parsePasteLine(line);
     }
@@ -632,18 +432,14 @@ function parseTime(str) {
 function parseRange(str) {
   var sepRx = /(?<=[\d\s]|am?|pm?)\s*[-\u2013]\s*/i;
   var idx = str.search(sepRx);
-  if (idx < 0) {
-    idx = str.indexOf('-');
-    if (idx < 0) return null;
-  }
+  if (idx < 0) { idx = str.indexOf('-'); if (idx < 0) return null; }
   var startStr = str.slice(0, idx).trim();
-  var endStr   = str.slice(idx).replace(/^\s*[-\u2013]\s*/, '').trim();
+  var endStr = str.slice(idx).replace(/^\s*[-\u2013]\s*/, '').trim();
   if (!/(am?|pm?)/i.test(startStr) && /(am?|pm?)/i.test(endStr)) {
     var ap = endStr.match(/(am?|pm?)/i)[0];
     startStr = startStr + ap;
   }
-  var start = parseTime(startStr);
-  var end   = parseTime(endStr);
+  var start = parseTime(startStr), end = parseTime(endStr);
   if (start === null || end === null) return null;
   return { start: start, end: end };
 }
@@ -655,9 +451,7 @@ function convertRange(str, off) {
   return fmtMin(r.start - off*60) + '-' + fmtMin(r.end - off*60);
 }
 
-function roundToQuarter(minutes) {
-  return Math.round(minutes / 15) * 15;
-}
+function roundToQuarter(minutes) { return Math.round(minutes / 15) * 15; }
 
 function splitTime(str, n, off) {
   var r = parseRange(str);
@@ -668,11 +462,8 @@ function splitTime(str, n, off) {
     return arr;
   }
   var s = r.start - off*60, e = r.end - off*60;
-  var total = e - s;
-  var exact = total / n;
-  var chunk = roundToQuarter(exact);
-  var slices = [];
-  var cursor = s;
+  var chunk = roundToQuarter((e - s) / n);
+  var slices = [], cursor = s;
   for (var i=0;i<n;i++) {
     var sliceLen = (i === n-1) ? (e - cursor) : chunk;
     slices.push(fmtMin(cursor) + '-' + fmtMin(cursor + sliceLen));
@@ -703,19 +494,15 @@ function generate() {
   if (!term)           { showError('Enter the term (e.g. SP 26).'); return; }
   if (!courses.length) { showError('Add at least one course.'); return; }
 
-  var masterLines = [], wiwLines = [], timeLines = [];
-  var warnings = [];
+  var masterLines = [], wiwLines = [], timeLines = [], warnings = [];
 
   courses.forEach(function(c) {
     if (c.time) {
       var r = parseRange(c.time);
       if (r) {
         var dur = r.end - r.start;
-        if (dur < 0) {
-          warnings.push(c.code + ': Time appears to cross midnight (' + c.time + '). Double-check AM/PM — this is likely a typo.');
-        } else if (c.teamType === 'solo' && dur > 90) {
-          warnings.push(c.code + ': Solo shift is over 1.5 hours. Consider teaming.');
-        }
+        if (dur < 0) warnings.push(c.code + ': Time appears to cross midnight (' + c.time + '). Double-check AM/PM.');
+        else if (c.teamType === 'solo' && dur > 90) warnings.push(c.code + ': Solo shift is over 1.5 hours. Consider teaming.');
       }
     }
   });
@@ -724,29 +511,31 @@ function generate() {
     var daysPart = c.days ? ' (' + c.days + ')' : '';
     var timeConverted = c.time ? convertRange(c.time, offset) : '';
     var tzLabel = (offset!==0 && timeConverted && timeConverted!==c.time) ? ' PT' : '';
+
+    // WIW name: NO time — time goes to time reference section only
     var base = student + ' - ' + c.code + daysPart;
 
     if (c.teamType === 'solo') {
       masterLines.push([client, student, term, c.code].join('\t'));
-      var name = base + buildSuffix('', c.loc);
-      wiwLines.push(name);
-      timeLines.push(timeConverted ? name + '    ' + timeConverted + tzLabel : name);
+      var wiwName = base + buildSuffix('', c.loc);
+      wiwLines.push(wiwName);
+      timeLines.push(timeConverted ? wiwName + '    ' + timeConverted + tzLabel : wiwName);
 
     } else if (c.teamType === 'team') {
       masterLines.push([client, student, term, c.code].join('\t'));
-      var name = base + buildSuffix('Teamed', c.loc);
-      wiwLines.push(name);
-      timeLines.push(timeConverted ? name + '    ' + timeConverted + tzLabel : name);
+      var wiwName = base + buildSuffix('Teamed', c.loc);
+      wiwLines.push(wiwName);
+      timeLines.push(timeConverted ? wiwName + '    ' + timeConverted + tzLabel : wiwName);
 
     } else if (c.teamType === 'seq') {
       var n = c.parts || 2;
       var slices = c.time ? splitTime(c.time, n, offset) : [];
       for (var i=1; i<=n; i++) {
         masterLines.push([client, student, term, c.code].join('\t'));
-        var name = base + buildSuffix('Sequential team ' + i + '/' + n, c.loc);
+        var wiwName = base + buildSuffix('Sequential team ' + i + '/' + n, c.loc);
         var t = slices[i-1] || timeConverted;
-        wiwLines.push(name);
-        timeLines.push(t ? name + '    ' + t + tzLabel : name);
+        wiwLines.push(wiwName);
+        timeLines.push(t ? wiwName + '    ' + t + tzLabel : wiwName);
       }
     }
   });
@@ -805,7 +594,7 @@ function esc(str) {
 </script>
 
 <div style="text-align:center; margin-top:32px; font-family:'DM Sans',sans-serif; font-size:11px; color:#8a9bb5; letter-spacing:0.03em;">
-  Authorized Use Only &mdash; Intellitext LLC 2026 &mdash; V 2.0
+  Authorized Use Only &mdash; Intellitext LLC 2026 &mdash; V 2.1
 </div>
 
 </body>

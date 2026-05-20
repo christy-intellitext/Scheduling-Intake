@@ -360,8 +360,9 @@ function onTeamChange(id) {
 }
 
 function parsePasteLine(line) {
-  // Step 1: extract time range by pattern (most distinctive token)
-  var timeRx = /\d{1,2}(?::\d{2})?\s*(?:am?|pm?)\s*[-\u2013]\s*\d{1,2}(?::\d{2})?\s*(?:am?|pm?)/i;
+  // Step 1: extract time range by pattern
+  // Handles: 6:00-9:00pm, 6:00pm-9:00pm, 9-9:50am, 1-2:15pm
+  var timeRx = /\d{1,2}(?::\d{2})?\s*(?:am?|pm?)?\s*[-\u2013]\s*\d{1,2}(?::\d{2})?\s*(?:am?|pm?)/i;
   var timeMatch = line.match(timeRx);
   var time = timeMatch ? timeMatch[0].trim() : '';
   var rest = timeMatch
@@ -369,17 +370,16 @@ function parsePasteLine(line) {
     : line.trim();
 
   // Step 2: extract days cluster from whatever remains
-  var daysRx = /\b((?:M(?:on)?|Tu(?:e)?(?:s)?|W(?:ed)?|Th(?:u)?(?:r)?(?:s)?|F(?:ri)?|Sa(?:t)?|Su(?:n)?)+)\b/i;
-  var daysMatch = null, dm;
-  var testRx = new RegExp(daysRx.source, 'gi');
-  while ((dm = testRx.exec(rest)) !== null) { daysMatch = dm; }
+  // Order matters: longer tokens (TTh, Th, Tu) must be tried before single letters
+  var daysRx = /\b((?:TTh|Th|Tu|Mo|Sa|Su|M|T|W|F)+)\b/i;
+  var daysMatch = rest.match(daysRx);
   var days = '', code = rest;
   if (daysMatch) {
     days = daysMatch[0].trim();
     code = (rest.slice(0, daysMatch.index) + rest.slice(daysMatch.index + daysMatch[0].length)).trim();
   }
 
-  // Step 3: clean up any stray leading/trailing punctuation from code
+  // Step 3: clean up stray punctuation from code
   code = code.replace(/^[\s,;|]+|[\s,;|]+$/g, '').trim();
 
   return { code: code, days: days, time: time };

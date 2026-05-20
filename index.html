@@ -67,6 +67,7 @@
   .col-code { min-width: 110px; width: 14%; }
   .col-days { min-width: 55px; width: 6%; }
   .col-time { min-width: 110px; width: 12%; }
+  .col-sect { min-width: 145px; width: 16%; }
   .col-team { min-width: 165px; width: 18%; }
   .col-parts { min-width: 70px; width: 8%; }
   .col-loc { min-width: 0; width: auto; }
@@ -222,6 +223,7 @@ NURS 419.1002 TTh 1-2:15pm
             <th class="col-code">Course code</th>
             <th class="col-days">Days</th>
             <th class="col-time">Time</th>
+            <th class="col-sect">Section</th>
             <th class="col-team">Shift type</th>
             <th class="col-parts">Parts</th>
             <th class="col-loc">Location / billing note</th>
@@ -315,6 +317,16 @@ function addRow(code, days, time) {
     '<td class="col-code"><input type="text" placeholder="FILM 300.1001" value="' + esc(code||'') + '"></td>' +
     '<td class="col-days"><input type="text" placeholder="MW" value="' + esc(days||'') + '"></td>' +
     '<td class="col-time"><input type="text" placeholder="6:00-9:00pm" value="' + esc(time||'') + '"></td>' +
+    '<td class="col-sect"><div class="toggle-group">' +
+      '<input type="radio" name="sect_' + id + '" id="sect_none_' + id + '" value="" checked>' +
+      '<label for="sect_none_' + id + '">None</label>' +
+      '<input type="radio" name="sect_' + id + '" id="sect_lec_' + id + '" value="Lecture">' +
+      '<label for="sect_lec_' + id + '">Lecture</label>' +
+      '<input type="radio" name="sect_' + id + '" id="sect_lab_' + id + '" value="Lab">' +
+      '<label for="sect_lab_' + id + '">Lab</label>' +
+      '<input type="radio" name="sect_' + id + '" id="sect_rec_' + id + '" value="Recitation">' +
+      '<label for="sect_rec_' + id + '">Rec</label>' +
+    '</div></td>' +
     '<td class="col-team"><div class="toggle-group">' +
       '<input type="radio" name="team_' + id + '" id="solo_' + id + '" value="solo" checked onchange="onTeamChange(' + id + ')">' +
       '<label for="solo_' + id + '">Solo</label>' +
@@ -409,7 +421,9 @@ function getRows() {
     var parts = pi ? (parseInt(pi.value)||2) : 2;
     var locR = tr.querySelector('input[name="loc_' + id + '"]:checked');
     var locVal = locR ? locR.value : '';
-    if (code) out.push({ code:code, days:days, time:time, teamType:teamType, parts:parts, loc:locVal });
+    var sectR = tr.querySelector('input[name="sect_' + id + '"]:checked');
+    var sectVal = sectR ? sectR.value : '';
+    if (code) out.push({ code:code, days:days, time:time, teamType:teamType, parts:parts, loc:locVal, sect:sectVal });
   });
   return out;
 }
@@ -522,8 +536,9 @@ function generate() {
     var timeConverted = c.time ? convertRange(c.time, offset) : '';
     var tzLabel = (offset!==0 && timeConverted && timeConverted!==c.time) ? ' PT' : '';
 
-    // WIW name: NO time — time goes to time reference section only
-    var base = student + ' - ' + c.code + daysPart;
+    // Base: Student - Course code Section (Days)
+    var sectPart = c.sect ? ' ' + c.sect : '';
+    var base = student + ' - ' + c.code + sectPart + daysPart;
 
     if (c.teamType === 'solo') {
       masterLines.push([client, student, term, c.code].join('\t'));

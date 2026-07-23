@@ -401,7 +401,6 @@ function importPaste() {
     if (parsed.code) { addRow(parsed.code, parsed.days, parsed.time); added++; }
   });
   if (added) {
-    document.getElementById('pasteBlock').value = '';
     setStatus(added + ' course' + (added!==1?'s':'') + ' imported');
   }
 }
@@ -453,6 +452,30 @@ function parseTime(str) {
   return toMin(m[1], m[2]||'0', ap);
 }
 
+function inferStartMeridian(startStr, endStr) {
+  // startStr has no am/pm of its own; endStr does. Rather than blindly
+  // copying the end's am/pm (which breaks noon-crossing ranges like
+  // "10:00-12:45pm" -> wrongly "10:00pm"), try both interpretations and
+  // keep whichever produces a sane same-day, start-before-end range.
+  var endTime = parseTime(endStr);
+  if (endTime === null) return startStr;
+  var amTime = parseTime(startStr + 'am');
+  var pmTime = parseTime(startStr + 'pm');
+  var amValid = amTime !== null && amTime <= endTime;
+  var pmValid = pmTime !== null && pmTime <= endTime;
+  if (amValid && pmValid) {
+    // Both are technically before the end time (e.g. 6:00-9:00pm) -
+    // prefer whichever is closer to the end (the more likely same-block reading).
+    return startStr + (pmTime >= amTime ? 'pm' : 'am');
+  }
+  if (amValid) return startStr + 'am';
+  if (pmValid) return startStr + 'pm';
+  // Neither interpretation precedes the end time - fall back to the
+  // end's own meridian rather than guessing further.
+  var endAp = endStr.match(/(am?|pm?)/i);
+  return startStr + (endAp ? endAp[0] : '');
+}
+
 function parseRange(str) {
   var sepRx = /(?<=[\d\s]|am?|pm?)\s*[-\u2013]\s*/i;
   var idx = str.search(sepRx);
@@ -460,8 +483,7 @@ function parseRange(str) {
   var startStr = str.slice(0, idx).trim();
   var endStr = str.slice(idx).replace(/^\s*[-\u2013]\s*/, '').trim();
   if (!/(am?|pm?)/i.test(startStr) && /(am?|pm?)/i.test(endStr)) {
-    var ap = endStr.match(/(am?|pm?)/i)[0];
-    startStr = startStr + ap;
+    startStr = inferStartMeridian(startStr, endStr);
   }
   var start = parseTime(startStr), end = parseTime(endStr);
   if (start === null || end === null) return null;
@@ -527,6 +549,8 @@ function generate() {
         var dur = r.end - r.start;
         if (dur < 0) warnings.push(c.code + ': Time appears to cross midnight (' + c.time + '). Double-check AM/PM.');
         else if (c.teamType === 'solo' && dur > 90) warnings.push(c.code + ': Solo shift is over 1.5 hours. Consider teaming.');
+      } else if (offset !== 0) {
+        warnings.push(c.code + ': Could not read AM/PM in "' + c.time + '" — time zone conversion was skipped for this course. Add am/pm to the time (e.g. "10:00am-12:00pm").');
       }
     }
   });
@@ -619,7 +643,7 @@ function esc(str) {
 </script>
 
 <div style="text-align:center; margin-top:32px; font-family:'DM Sans',sans-serif; font-size:11px; color:#8a9bb5; letter-spacing:0.03em;">
-  Authorized Use Only &mdash; Intellitext LLC 2026 &mdash; V 2.1
+  Authorized Use Only &mdash; Intellitext LLC 2026 &mdash; V 2.2
 </div>
 
 </body>

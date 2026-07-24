@@ -562,16 +562,17 @@ function generate() {
 
     // Base: Student - Course code Section (Days)
     var sectPart = c.sect ? ' ' + c.sect : '';
+    var jobCode = c.code + sectPart;
     var base = student + ' - ' + c.code + sectPart + daysPart;
 
     if (c.teamType === 'solo') {
-      masterLines.push([client, student, term, c.code].join('\t'));
+      masterLines.push([client, student, term, jobCode].join('\t'));
       var wiwName = base + buildSuffix('', c.loc);
       wiwLines.push(wiwName);
       timeLines.push(timeConverted ? wiwName + '    ' + timeConverted + tzLabel : wiwName);
 
     } else if (c.teamType === 'team') {
-      masterLines.push([client, student, term, c.code].join('\t'));
+      masterLines.push([client, student, term, jobCode].join('\t'));
       var wiwName = base + buildSuffix('Teamed', c.loc);
       wiwLines.push(wiwName);
       timeLines.push(timeConverted ? wiwName + '    ' + timeConverted + tzLabel : wiwName);
@@ -579,7 +580,7 @@ function generate() {
     } else if (c.teamType === 'seq') {
       var n = c.parts || 2;
       var slices = c.time ? splitTime(c.time, n, offset) : [];
-      masterLines.push([client, student, term, c.code].join('\t'));
+      masterLines.push([client, student, term, jobCode].join('\t'));
       for (var i=1; i<=n; i++) {
         var wiwName = base + buildSuffix('Sequential team ' + i + '/' + n, c.loc);
         var t = slices[i-1] || timeConverted;
@@ -643,7 +644,7 @@ function esc(str) {
 </script>
 
 <div style="text-align:center; margin-top:32px; font-family:'DM Sans',sans-serif; font-size:11px; color:#8a9bb5; letter-spacing:0.03em;">
-  Authorized Use Only &mdash; Intellitext LLC 2026 &mdash; V 2.3
+  Authorized Use Only &mdash; Intellitext LLC 2026 &mdash; V 2.4
 </div>
 
 </body>

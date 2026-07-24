@@ -579,8 +579,8 @@ function generate() {
     } else if (c.teamType === 'seq') {
       var n = c.parts || 2;
       var slices = c.time ? splitTime(c.time, n, offset) : [];
+      masterLines.push([client, student, term, c.code].join('\t'));
       for (var i=1; i<=n; i++) {
-        masterLines.push([client, student, term, c.code].join('\t'));
         var wiwName = base + buildSuffix('Sequential team ' + i + '/' + n, c.loc);
         var t = slices[i-1] || timeConverted;
         wiwLines.push(wiwName);
@@ -643,7 +643,7 @@ function esc(str) {
 </script>
 
 <div style="text-align:center; margin-top:32px; font-family:'DM Sans',sans-serif; font-size:11px; color:#8a9bb5; letter-spacing:0.03em;">
-  Authorized Use Only &mdash; Intellitext LLC 2026 &mdash; V 2.2
+  Authorized Use Only &mdash; Intellitext LLC 2026 &mdash; V 2.3
 </div>
 
 </body>

@@ -379,10 +379,11 @@ function parsePasteLine(line) {
     code = (rest.slice(0, daysMatch.index) + rest.slice(daysMatch.index + daysMatch[0].length)).trim();
   }
 
-  // Step 3: clean up stray punctuation from code
-  code = code.replace(/^[\s,;|]+|[\s,;|]+$/g, '').trim();
+  // Step 3: clean up stray punctuation, embedded tabs, and repeated whitespace from code
+  code = code.replace(/^[\s,;|]+|[\s,;|]+$/g, '');
+  code = cleanField(code);
 
-  return { code: code, days: days, time: time };
+  return { code: code, days: cleanField(days), time: cleanField(time) };
 }
 
 function importPaste() {
@@ -393,7 +394,7 @@ function importPaste() {
   lines.forEach(function(line) {
     var parsed;
     if (line.indexOf(',') !== -1) {
-      var parts = line.split(',').map(function(p){ return p.trim(); });
+      var parts = line.split(',').map(function(p){ return cleanField(p); });
       parsed = { code: parts[0]||'', days: parts[1]||'', time: parts[2]||'' };
     } else {
       parsed = parsePasteLine(line);
@@ -411,9 +412,9 @@ function getRows() {
   rows.forEach(function(tr) {
     var id = tr.id.replace('row-','');
     var inputs = tr.querySelectorAll('input[type="text"]');
-    var code = inputs[0] ? inputs[0].value.trim() : '';
-    var days = inputs[1] ? inputs[1].value.trim() : '';
-    var time = inputs[2] ? inputs[2].value.trim() : '';
+    var code = inputs[0] ? cleanField(inputs[0].value) : '';
+    var days = inputs[1] ? cleanField(inputs[1].value) : '';
+    var time = inputs[2] ? cleanField(inputs[2].value) : '';
     var teamR = tr.querySelector('input[name="team_' + id + '"]:checked');
     var teamType = teamR ? teamR.value : 'solo';
     var pi = document.getElementById('parts_' + id);
@@ -529,9 +530,9 @@ function generate() {
   document.getElementById('errorArea').style.display = 'none';
   document.getElementById('resultSection').style.display = 'none';
 
-  var client  = document.getElementById('clientName').value.trim();
-  var student = document.getElementById('studentName').value.trim();
-  var term    = document.getElementById('termName').value.trim();
+  var client  = cleanField(document.getElementById('clientName').value);
+  var student = cleanField(document.getElementById('studentName').value);
+  var term    = cleanField(document.getElementById('termName').value);
   var offset  = parseInt(document.getElementById('sourceTz').value);
   var courses = getRows();
 
@@ -641,10 +642,18 @@ function setStatus(msg) { document.getElementById('statusMsg').textContent = msg
 function esc(str) {
   return (str||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
+
+// Trims edges, converts any embedded tab characters to a single space, and
+// collapses repeated whitespace (spaces/tabs/newlines) down to one space.
+// Prevents a stray tab or double-space in a pasted field from silently
+// adding extra columns to the tab-separated master list output.
+function cleanField(str) {
+  return (str || '').replace(/\t/g, ' ').replace(/\s+/g, ' ').trim();
+}
 </script>
 
 <div style="text-align:center; margin-top:32px; font-family:'DM Sans',sans-serif; font-size:11px; color:#8a9bb5; letter-spacing:0.03em;">
-  Authorized Use Only &mdash; Intellitext LLC 2026 &mdash; V 2.4
+  Authorized Use Only &mdash; Intellitext LLC 2026 &mdash; V 2.5
 </div>
 
 </body>

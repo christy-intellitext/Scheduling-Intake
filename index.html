@@ -197,20 +197,18 @@
     <div class="section-label">Courses</div>
 
     <div class="field" style="margin-bottom:10px;">
-      <label>Paste course block &mdash; one per line (any order: Course code, Days, Start-End time)</label>
+      <label>Paste course block &mdash; one per line (Course code, Days, Start-End time)</label>
       <div class="paste-row">
-        <textarea id="pasteBlock" placeholder="FILM 300.1001 W 6:00-9:00pm&#10;FILM 315.1001 T 10:00-12:45pm&#10;FILM 417.1002 W 10:00-12:45pm"></textarea>
+        <textarea id="pasteBlock" placeholder="FILM 300, W, 6:00-9:00pm&#10;ENG 101, TTH, 10:00-12:45pm&#10;MATH 417, MW, 10:00-12:45pm"></textarea>
         <div class="paste-actions">
           <button class="btn" onclick="importPaste()">Import &darr;</button>
           <button class="btn" onclick="document.getElementById('pasteBlock').value=''" style="font-size:12px;opacity:0.7;">Clear</button>
         </div>
       </div>
       <div class="format-hint">
-        Any order works &mdash; time range and days are detected by pattern:
-        <div class="example">FILM 300.1001 W 6:00-9:00pm
-W 6:00-9:00pm FILM 300.1001
-NURS 419.1002 TTh 1-2:15pm
-1-2:15pm TTh NURS 419.1002</div>
+        Each line must be in this exact order, comma-separated: Course code, Days, Start-End time
+        <div class="example">FILM 300.1001, W, 6:00-9:00pm
+NURS 419.1002, TTh, 1-2:15pm</div>
       </div>
     </div>
 

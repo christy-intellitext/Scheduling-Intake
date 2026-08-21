@@ -191,6 +191,12 @@
         </select>
       </div>
     </div>
+    <div class="fields-row" style="grid-template-columns: 1fr; margin-top: 12px;">
+      <div class="field">
+        <label>Term transcript folder link <span style="text-transform:none;font-weight:400;color:#a0aec0;">(optional &mdash; paste the student's Fall 2026-style term folder to auto-create class subfolders)</span></label>
+        <input type="text" id="termFolderLink" placeholder="https://drive.google.com/drive/folders/…">
+      </div>
+    </div>
   </div>
 
   <div class="card">
@@ -239,6 +245,7 @@ NURS 419.1002, TTh, 1-2:15pm</div>
 
   <div class="btn-row">
     <button class="btn btn-primary" onclick="generate()">Generate outputs</button>
+    <button class="btn" onclick="createClassFolders()">Create class folders</button>
     <button class="btn" onclick="clearAll()">Clear all</button>
     <span id="statusMsg"></span>
   </div>
@@ -280,13 +287,27 @@ NURS 419.1002, TTh, 1-2:15pm</div>
       <textarea id="timeOut" readonly></textarea>
     </div>
 
-    <p class="hint">Transcript destination column left blank &mdash; add Drive links manually after pasting into the sheet.</p>
+    <p class="hint">Transcript destination column left blank &mdash; add Drive links manually after pasting into the sheet, or use "Create class folders" above.</p>
 
+  </div>
+
+  <div class="output-block" id="folderResultBlock" style="display:none;">
+    <div class="output-header">
+      <div>
+        <div class="output-label">Class folder links</div>
+        <div class="output-hint">Tab-separated: Course code / Drive folder link &mdash; created under the term folder</div>
+      </div>
+      <button class="btn btn-sm" onclick="copyOut('folderOut')">Copy</button>
+    </div>
+    <textarea id="folderOut" readonly></textarea>
   </div>
 
 </div>
 
 <script>
+// Paste your deployed Apps Script Web App /exec URL here (see ClassFolderCreator.gs)
+var FOLDER_API_URL = 'https://script.google.com/macros/s/AKfycby-kg1lHNEYzZARDalEe8ZRLqMJQq9NqZkoi8T4b97reh6IXCTjQ6dE18KaME4g-1p9Zw/exec';
+
 var rowCount = 0;
 
 var LOCATION_OPTIONS = [
@@ -452,10 +473,6 @@ function parseTime(str) {
 }
 
 function inferStartMeridian(startStr, endStr) {
-  // startStr has no am/pm of its own; endStr does. Rather than blindly
-  // copying the end's am/pm (which breaks noon-crossing ranges like
-  // "10:00-12:45pm" -> wrongly "10:00pm"), try both interpretations and
-  // keep whichever produces a sane same-day, start-before-end range.
   var endTime = parseTime(endStr);
   if (endTime === null) return startStr;
   var amTime = parseTime(startStr + 'am');
@@ -463,14 +480,10 @@ function inferStartMeridian(startStr, endStr) {
   var amValid = amTime !== null && amTime <= endTime;
   var pmValid = pmTime !== null && pmTime <= endTime;
   if (amValid && pmValid) {
-    // Both are technically before the end time (e.g. 6:00-9:00pm) -
-    // prefer whichever is closer to the end (the more likely same-block reading).
     return startStr + (pmTime >= amTime ? 'pm' : 'am');
   }
   if (amValid) return startStr + 'am';
   if (pmValid) return startStr + 'pm';
-  // Neither interpretation precedes the end time - fall back to the
-  // end's own meridian rather than guessing further.
   var endAp = endStr.match(/(am?|pm?)/i);
   return startStr + (endAp ? endAp[0] : '');
 }
@@ -559,7 +572,6 @@ function generate() {
     var timeConverted = c.time ? convertRange(c.time, offset) : '';
     var tzLabel = (offset!==0 && timeConverted && timeConverted!==c.time) ? ' PT' : '';
 
-    // Base: Student - Course code Section (Days)
     var sectPart = c.sect ? ' ' + c.sect : '';
     var jobCode = c.code + sectPart;
     var base = student + ' - ' + c.code + sectPart + daysPart;
@@ -609,6 +621,65 @@ function generate() {
   }
 }
 
+function extractFolderIdClient(link) {
+  if (!link) return '';
+  var trimmed = link.trim();
+  if (/^[a-zA-Z0-9_-]{20,}$/.test(trimmed)) return trimmed;
+  var folderMatch = trimmed.match(/\/folders\/([a-zA-Z0-9_-]+)/);
+  if (folderMatch) return folderMatch[1];
+  var idParamMatch = trimmed.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (idParamMatch) return idParamMatch[1];
+  return '';
+}
+
+function createClassFolders() {
+  document.getElementById('errorArea').style.display = 'none';
+
+  if (!FOLDER_API_URL || FOLDER_API_URL === 'PASTE_YOUR_WEB_APP_URL_HERE') {
+    showError('Folder creation isn\'t set up yet — the Web App URL needs to be added to this page.');
+    return;
+  }
+
+  var termLink = cleanField(document.getElementById('termFolderLink').value);
+  if (!termLink) { showError('Paste the student\'s term transcript folder link first.'); return; }
+  if (!extractFolderIdClient(termLink)) { showError('Couldn\'t read a folder ID from that link. Paste the full Drive folder URL or its ID.'); return; }
+
+  var courses = getRows();
+  if (!courses.length) { showError('Add at least one course first.'); return; }
+
+  var codes = [];
+  courses.forEach(function(c) {
+    if (codes.indexOf(c.code) === -1) codes.push(c.code);
+  });
+
+  setStatus('Creating folders…');
+
+  fetch(FOLDER_API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ termFolderId: termLink, courseCodes: codes })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data.error) { showError(data.error); setStatus(''); return; }
+
+    var lines = data.results.map(function(r) { return r.code + '\t' + r.url; });
+    document.getElementById('folderOut').value = lines.join('\n');
+    document.getElementById('folderResultBlock').style.display = 'block';
+    document.getElementById('folderResultBlock').scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    var createdCount = data.results.filter(function(r) { return r.created; }).length;
+    var reusedCount = data.results.length - createdCount;
+    var msg = createdCount + ' folder' + (createdCount !== 1 ? 's' : '') + ' created';
+    if (reusedCount) msg += ', ' + reusedCount + ' already existed';
+    setStatus(msg);
+  })
+  .catch(function(err) {
+    showError('Folder creation failed: ' + err.message);
+    setStatus('');
+  });
+}
+
 function copyOut(id) {
   var el = document.getElementById(id);
   navigator.clipboard.writeText(el.value).then(function() {
@@ -641,17 +712,13 @@ function esc(str) {
   return (str||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-// Trims edges, converts any embedded tab characters to a single space, and
-// collapses repeated whitespace (spaces/tabs/newlines) down to one space.
-// Prevents a stray tab or double-space in a pasted field from silently
-// adding extra columns to the tab-separated master list output.
 function cleanField(str) {
   return (str || '').replace(/\t/g, ' ').replace(/\s+/g, ' ').trim();
 }
 </script>
 
 <div style="text-align:center; margin-top:32px; font-family:'DM Sans',sans-serif; font-size:11px; color:#8a9bb5; letter-spacing:0.03em;">
-  Authorized Use Only &mdash; Intellitext LLC 2026 &mdash; V 2.5
+  Authorized Use Only &mdash; Intellitext LLC 2026 &mdash; V 2.6
 </div>
 
 </body>

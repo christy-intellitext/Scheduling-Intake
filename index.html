@@ -246,6 +246,7 @@ NURS 419.1002, TTh, 1-2:15pm</div>
   <div class="btn-row">
     <button class="btn btn-primary" onclick="generate()">Generate outputs</button>
     <button class="btn" onclick="createClassFolders()">Create class folders</button>
+    <button class="btn" onclick="writeMasterList()">Write to Master Class List</button>
     <button class="btn" onclick="clearAll()">Clear all</button>
     <span id="statusMsg"></span>
   </div>
@@ -306,9 +307,10 @@ NURS 419.1002, TTh, 1-2:15pm</div>
 
 <script>
 // Paste your deployed Apps Script Web App /exec URL here (see ClassFolderCreator.gs)
-var FOLDER_API_URL = 'https://script.google.com/macros/s/AKfycby07enozWTi_iooq69dAdPncjCx2qL0MuJ1oPmaRuh2E7XJPL8wdmZgVJbvPcrVMh4qMw/exec';
+var FOLDER_API_URL = 'https://script.google.com/macros/s/AKfycbx5LQK_Q5aJujPuD9dnBrc7Q2tq3VLBpUbh-0S8L2OTj4mrYtfbfAuzXPYHx4Fkc0PaKw/exec';
 
 var rowCount = 0;
+var lastFolderLinks = {}; // course code -> Drive folder URL, populated by createClassFolders()
 
 var LOCATION_OPTIONS = [
   { value: '',         label: 'None' },
@@ -657,11 +659,13 @@ function createClassFolders() {
   fetch(FOLDER_API_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify({ termFolderId: termLink, courseCodes: codes })
+    body: JSON.stringify({ action: 'createFolders', termFolderId: termLink, courseCodes: codes })
   })
   .then(function(r) { return r.json(); })
   .then(function(data) {
     if (data.error) { showError(data.error); setStatus(''); return; }
+
+    data.results.forEach(function(r) { lastFolderLinks[r.code] = r.url; });
 
     var lines = data.results.map(function(r) { return r.code + '\t' + r.url; });
     document.getElementById('folderOut').value = lines.join('\n');
@@ -676,6 +680,53 @@ function createClassFolders() {
   })
   .catch(function(err) {
     showError('Folder creation failed: ' + err.message);
+    setStatus('');
+  });
+}
+
+function writeMasterList() {
+  document.getElementById('errorArea').style.display = 'none';
+
+  if (!FOLDER_API_URL || FOLDER_API_URL === 'PASTE_YOUR_WEB_APP_URL_HERE') {
+    showError('This isn\'t set up yet — the Web App URL needs to be added to this page.');
+    return;
+  }
+
+  var client  = cleanField(document.getElementById('clientName').value);
+  var student = cleanField(document.getElementById('studentName').value);
+  var term    = cleanField(document.getElementById('termName').value);
+  var courses = getRows();
+
+  if (!client)         { showError('Enter a client name.'); return; }
+  if (!student)        { showError('Enter the student\'s first name.'); return; }
+  if (!term)           { showError('Enter the term (e.g. SP 26).'); return; }
+  if (!courses.length) { showError('Add at least one course.'); return; }
+
+  var seenCodes = {};
+  var rows = [];
+  courses.forEach(function(c) {
+    var sectPart = c.sect ? ' ' + c.sect : '';
+    var jobCode = c.code + sectPart;
+    if (seenCodes[jobCode]) return; // one row per unique course, matching the master list format
+    seenCodes[jobCode] = true;
+    var link = lastFolderLinks[c.code] || '';
+    rows.push([client, student, term, jobCode, link]);
+  });
+
+  setStatus('Writing to Master Class List…');
+
+  fetch(FOLDER_API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action: 'writeMasterRows', rows: rows })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data.error) { showError(data.error); setStatus(''); return; }
+    setStatus(data.written + ' row' + (data.written !== 1 ? 's' : '') + ' added to Master Class List');
+  })
+  .catch(function(err) {
+    showError('Writing to Master Class List failed: ' + err.message);
     setStatus('');
   });
 }

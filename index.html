@@ -288,19 +288,8 @@ NURS 419.1002, TTh, 1-2:15pm</div>
       <textarea id="timeOut" readonly></textarea>
     </div>
 
-    <p class="hint">Transcript destination column left blank &mdash; add Drive links manually after pasting into the sheet, or use "Create class folders" above.</p>
+    <p class="hint">Transcript destination column left blank &mdash; add Drive links manually after pasting into the sheet, or use "Create class folders" above to fill it in automatically.</p>
 
-  </div>
-
-  <div class="output-block" id="folderResultBlock" style="display:none;">
-    <div class="output-header">
-      <div>
-        <div class="output-label">Class folder links</div>
-        <div class="output-hint">Tab-separated: Course code / Drive folder link &mdash; created under the term folder</div>
-      </div>
-      <button class="btn btn-sm" onclick="copyOut('folderOut')">Copy</button>
-    </div>
-    <textarea id="folderOut" readonly></textarea>
   </div>
 
 </div>
@@ -311,6 +300,7 @@ var FOLDER_API_URL = 'https://script.google.com/macros/s/AKfycbx5LQK_Q5aJujPuD9d
 
 var rowCount = 0;
 var lastFolderLinks = {}; // course code -> Drive folder URL, populated by createClassFolders()
+var lastMasterRows = []; // {client, student, term, jobCode, code} for the most recent "Generate outputs" run
 
 var LOCATION_OPTIONS = [
   { value: '',         label: 'None' },
@@ -555,6 +545,8 @@ function generate() {
   if (!courses.length) { showError('Add at least one course.'); return; }
 
   var masterLines = [], wiwLines = [], timeLines = [], warnings = [];
+  lastMasterRows = [];
+  lastFolderLinks = {};
 
   courses.forEach(function(c) {
     if (c.time) {
@@ -579,13 +571,13 @@ function generate() {
     var base = student + ' - ' + c.code + sectPart + daysPart;
 
     if (c.teamType === 'solo') {
-      masterLines.push([client, student, term, jobCode].join('\t'));
+      lastMasterRows.push({ client: client, student: student, term: term, jobCode: jobCode, code: c.code });
       var wiwName = base + buildSuffix('', c.loc);
       wiwLines.push(wiwName);
       timeLines.push(timeConverted ? wiwName + '    ' + timeConverted + tzLabel : wiwName);
 
     } else if (c.teamType === 'team') {
-      masterLines.push([client, student, term, jobCode].join('\t'));
+      lastMasterRows.push({ client: client, student: student, term: term, jobCode: jobCode, code: c.code });
       var wiwName = base + buildSuffix('Teamed', c.loc);
       wiwLines.push(wiwName);
       timeLines.push(timeConverted ? wiwName + '    ' + timeConverted + tzLabel : wiwName);
@@ -593,7 +585,7 @@ function generate() {
     } else if (c.teamType === 'seq') {
       var n = c.parts || 2;
       var slices = c.time ? splitTime(c.time, n, offset) : [];
-      masterLines.push([client, student, term, jobCode].join('\t'));
+      lastMasterRows.push({ client: client, student: student, term: term, jobCode: jobCode, code: c.code });
       for (var i=1; i<=n; i++) {
         var wiwName = base + buildSuffix('Sequential team ' + i + '/' + n, c.loc);
         var t = slices[i-1] || timeConverted;
@@ -603,7 +595,7 @@ function generate() {
     }
   });
 
-  document.getElementById('masterOut').value = masterLines.join('\n');
+  document.getElementById('masterOut').value = buildMasterOutText();
   document.getElementById('wiwOut').value = wiwLines.join('\n');
   document.getElementById('timeOut').value = timeLines.join('\n');
   document.getElementById('resultSection').style.display = 'block';
@@ -621,6 +613,15 @@ function generate() {
     warnEl.innerHTML = '';
     document.getElementById('resultSection').scrollIntoView({ behavior:'smooth', block:'start' });
   }
+}
+
+function buildMasterOutText() {
+  return lastMasterRows.map(function(r) {
+    var link = lastFolderLinks[r.code] || '';
+    var cols = [r.client, r.student, r.term, r.jobCode];
+    if (link) cols.push(link);
+    return cols.join('\t');
+  }).join('\n');
 }
 
 function extractFolderIdClient(link) {
@@ -667,10 +668,8 @@ function createClassFolders() {
 
     data.results.forEach(function(r) { lastFolderLinks[r.code] = r.url; });
 
-    var lines = data.results.map(function(r) { return r.code + '\t' + r.url; });
-    document.getElementById('folderOut').value = lines.join('\n');
-    document.getElementById('folderResultBlock').style.display = 'block';
-    document.getElementById('folderResultBlock').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    document.getElementById('masterOut').value = buildMasterOutText();
+    document.getElementById('masterOut').scrollIntoView({ behavior: 'smooth', block: 'center' });
 
     var createdCount = data.results.filter(function(r) { return r.created; }).length;
     var reusedCount = data.results.length - createdCount;
@@ -692,25 +691,11 @@ function writeMasterList() {
     return;
   }
 
-  var client  = cleanField(document.getElementById('clientName').value);
-  var student = cleanField(document.getElementById('studentName').value);
-  var term    = cleanField(document.getElementById('termName').value);
-  var courses = getRows();
+  if (!lastMasterRows.length) { showError('Click "Generate outputs" first.'); return; }
 
-  if (!client)         { showError('Enter a client name.'); return; }
-  if (!student)        { showError('Enter the student\'s first name.'); return; }
-  if (!term)           { showError('Enter the term (e.g. SP 26).'); return; }
-  if (!courses.length) { showError('Add at least one course.'); return; }
-
-  var seenCodes = {};
-  var rows = [];
-  courses.forEach(function(c) {
-    var sectPart = c.sect ? ' ' + c.sect : '';
-    var jobCode = c.code + sectPart;
-    if (seenCodes[jobCode]) return; // one row per unique course, matching the master list format
-    seenCodes[jobCode] = true;
-    var link = lastFolderLinks[c.code] || '';
-    rows.push([client, student, term, jobCode, link]);
+  var rows = lastMasterRows.map(function(r) {
+    var link = lastFolderLinks[r.code] || '';
+    return [r.client, r.student, r.term, r.jobCode, link];
   });
 
   setStatus('Writing to Master Class List…');

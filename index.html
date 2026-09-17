@@ -296,14 +296,14 @@ NURS 419.1002, TTh, 1-2:15pm</div>
       <div class="output-header">
         <div>
           <div class="output-label">WIW Shift Notes</div>
-          <div class="output-hint">One block per shift &mdash; paste the matching block into that shift's notes field in WhenIWork</div>
+          <div class="output-hint">One line per shift item, separated by "---" &mdash; paste the matching block into that shift's notes field in WhenIWork</div>
         </div>
         <button class="btn btn-sm" onclick="copyOut('shiftNotesOut')">Copy</button>
       </div>
       <textarea id="shiftNotesOut" readonly style="height:220px;"></textarea>
     </div>
 
-    <p class="hint">Transcript destination column left blank &mdash; add Drive links manually after pasting into the sheet, or use "Create class folders" above to fill it in automatically. Portal Tokens and WIW Shift Notes are only generated once you click "Generate portal tokens and write to Master Class List" (tokens are written straight into the sheet).</p>
+    <p class="hint">Transcript destination column left blank &mdash; add Drive links manually after pasting into the sheet, or use "Create class folders" above to fill it in automatically. Portal Tokens and WIW Shift Notes are only generated once you click "Generate Portal Tokens and write to Master Class List" (tokens are written straight into the sheet).</p>
 
   </div>
 
@@ -750,7 +750,7 @@ function writeMasterList() {
           PORTAL_URL,
           'Portal Token: ' + token
         ];
-        return lines.join('\n');
+        return lines.join('\n---\n');
       });
       document.getElementById('shiftNotesOut').value = noteBlocks.join('\n\n');
       document.getElementById('shiftNotesBlock').style.display = 'block';

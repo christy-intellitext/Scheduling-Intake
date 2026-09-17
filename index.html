@@ -307,7 +307,7 @@ NURS 419.1002, TTh, 1-2:15pm</div>
       <div class="output-header">
         <div>
           <div class="output-label">WIW Shift Notes</div>
-          <div class="output-hint">One line per shift, separated by "--" &mdash; paste the block for the matching job name into that shift's notes field in WhenIWork</div>
+          <div class="output-hint">One block per shift &mdash; paste the matching block into that shift's notes field in WhenIWork</div>
         </div>
         <button class="btn btn-sm" onclick="copyOut('shiftNotesOut')">Copy</button>
       </div>
@@ -322,7 +322,7 @@ NURS 419.1002, TTh, 1-2:15pm</div>
 
 <script>
 // Paste your deployed Apps Script Web App /exec URL here (see ClassFolderCreator.gs)
-var FOLDER_API_URL = 'https://script.google.com/macros/s/AKfycbzzyhckLhiPX9c_2aA-FQUNESRe6OO8kBwiA4lBFtpBRjyvLjhOXn-YndLK9mgcZ8gWqA/exec';
+var FOLDER_API_URL = 'https://script.google.com/macros/s/AKfycbx5LQK_Q5aJujPuD9dnBrc7Q2tq3VLBpUbh-0S8L2OTj4mrYtfbfAuzXPYHx4Fkc0PaKw/exec';
 
 var rowCount = 0;
 var lastFolderLinks = {}; // course code -> Drive folder URL, populated by createClassFolders()
@@ -767,9 +767,9 @@ function writeMasterList() {
           jobDetailsLink || '(no Job Details link entered)',
           'Portal Token: ' + token
         ];
-        return lines.join('\n\n--\n\n');
+        return lines.join('\n');
       });
-      document.getElementById('shiftNotesOut').value = noteBlocks.join('\n\n--\n\n');
+      document.getElementById('shiftNotesOut').value = noteBlocks.join('\n\n');
       document.getElementById('shiftNotesBlock').style.display = 'block';
 
       document.getElementById('shiftNotesBlock').scrollIntoView({ behavior: 'smooth', block: 'center' });

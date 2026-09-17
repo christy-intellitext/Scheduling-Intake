@@ -312,6 +312,7 @@ NURS 419.1002, TTh, 1-2:15pm</div>
 <script>
 // Paste your deployed Apps Script Web App /exec URL here (see ClassFolderCreator.gs)
 var FOLDER_API_URL = 'https://script.google.com/macros/s/AKfycbzzyhckLhiPX9c_2aA-FQUNESRe6OO8kBwiA4lBFtpBRjyvLjhOXn-YndLK9mgcZ8gWqA/exec';
+var PORTAL_URL = 'https://jobreporting.intellitext.us';
 
 var rowCount = 0;
 var lastFolderLinks = {}; // course code -> Drive folder URL, populated by createClassFolders()
@@ -746,6 +747,7 @@ function writeMasterList() {
         var lines = [
           entry.wiwName,
           jobDetailsLink || '(no Job Details link entered)',
+          PORTAL_URL,
           'Portal Token: ' + token
         ];
         return lines.join('\n');

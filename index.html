@@ -191,10 +191,14 @@
         </select>
       </div>
     </div>
-    <div class="fields-row" style="grid-template-columns: 1fr; margin-top: 12px;">
+    <div class="fields-row" style="grid-template-columns: 1fr 1fr; margin-top: 12px;">
       <div class="field">
         <label>Term transcript folder link <span style="text-transform:none;font-weight:400;color:#a0aec0;">(optional &mdash; paste the parent folder where the new subfolders for this term should be created)</span></label>
         <input type="text" id="termFolderLink" placeholder="https://drive.google.com/drive/folders/…">
+      </div>
+      <div class="field">
+        <label>Job Details link <span style="text-transform:none;font-weight:400;color:#a0aec0;">(for the WIW shift notes below)</span></label>
+        <input type="text" id="jobDetailsLink" placeholder="https://docs.google.com/document/…">
       </div>
     </div>
   </div>
@@ -288,7 +292,29 @@ NURS 419.1002, TTh, 1-2:15pm</div>
       <textarea id="timeOut" readonly></textarea>
     </div>
 
-    <p class="hint">Transcript destination column left blank &mdash; add Drive links manually after pasting into the sheet, or use "Create class folders" above to fill it in automatically.</p>
+    <div class="output-block" id="tokensBlock" style="display:none;">
+      <div class="output-header">
+        <div>
+          <div class="output-label">Portal Tokens</div>
+          <div class="output-hint">Job code paired with its new Portal Token &mdash; for your own reference</div>
+        </div>
+        <button class="btn btn-sm" onclick="copyOut('tokensOut')">Copy</button>
+      </div>
+      <textarea id="tokensOut" readonly></textarea>
+    </div>
+
+    <div class="output-block" id="shiftNotesBlock" style="display:none;">
+      <div class="output-header">
+        <div>
+          <div class="output-label">WIW Shift Notes</div>
+          <div class="output-hint">One line per shift, separated by "--" &mdash; paste the block for the matching job name into that shift's notes field in WhenIWork</div>
+        </div>
+        <button class="btn btn-sm" onclick="copyOut('shiftNotesOut')">Copy</button>
+      </div>
+      <textarea id="shiftNotesOut" readonly style="height:220px;"></textarea>
+    </div>
+
+    <p class="hint">Transcript destination column left blank &mdash; add Drive links manually after pasting into the sheet, or use "Create class folders" above to fill it in automatically. Portal Tokens and WIW Shift Notes are only generated once you click "Write to Master Class List" (tokens are written straight into the sheet).</p>
 
   </div>
 
@@ -296,11 +322,12 @@ NURS 419.1002, TTh, 1-2:15pm</div>
 
 <script>
 // Paste your deployed Apps Script Web App /exec URL here (see ClassFolderCreator.gs)
-var FOLDER_API_URL = 'https://script.google.com/macros/s/AKfycbx5LQK_Q5aJujPuD9dnBrc7Q2tq3VLBpUbh-0S8L2OTj4mrYtfbfAuzXPYHx4Fkc0PaKw/exec';
+var FOLDER_API_URL = 'https://script.google.com/macros/s/AKfycbzzyhckLhiPX9c_2aA-FQUNESRe6OO8kBwiA4lBFtpBRjyvLjhOXn-YndLK9mgcZ8gWqA/exec';
 
 var rowCount = 0;
 var lastFolderLinks = {}; // course code -> Drive folder URL, populated by createClassFolders()
 var lastMasterRows = []; // {client, student, term, jobCode, code} for the most recent "Generate outputs" run
+var lastWiwEntries = []; // {wiwName, jobCode} one per WIW shift line (multiple per course for teamed/sequential)
 
 var LOCATION_OPTIONS = [
   { value: '',         label: 'None' },
@@ -547,6 +574,12 @@ function generate() {
   var masterLines = [], wiwLines = [], timeLines = [], warnings = [];
   lastMasterRows = [];
   lastFolderLinks = {};
+  lastWiwEntries = [];
+
+  document.getElementById('tokensBlock').style.display = 'none';
+  document.getElementById('tokensOut').value = '';
+  document.getElementById('shiftNotesBlock').style.display = 'none';
+  document.getElementById('shiftNotesOut').value = '';
 
   courses.forEach(function(c) {
     if (c.time) {
@@ -575,12 +608,14 @@ function generate() {
       var wiwName = base + buildSuffix('', c.loc);
       wiwLines.push(wiwName);
       timeLines.push(timeConverted ? wiwName + '    ' + timeConverted + tzLabel : wiwName);
+      lastWiwEntries.push({ wiwName: wiwName, jobCode: jobCode });
 
     } else if (c.teamType === 'team') {
       lastMasterRows.push({ client: client, student: student, term: term, jobCode: jobCode, code: c.code });
       var wiwName = base + buildSuffix('Teamed', c.loc);
       wiwLines.push(wiwName);
       timeLines.push(timeConverted ? wiwName + '    ' + timeConverted + tzLabel : wiwName);
+      lastWiwEntries.push({ wiwName: wiwName, jobCode: jobCode });
 
     } else if (c.teamType === 'seq') {
       var n = c.parts || 2;
@@ -591,6 +626,7 @@ function generate() {
         var t = slices[i-1] || timeConverted;
         wiwLines.push(wiwName);
         timeLines.push(t ? wiwName + '    ' + t + tzLabel : wiwName);
+        lastWiwEntries.push({ wiwName: wiwName, jobCode: jobCode });
       }
     }
   });
@@ -708,7 +744,36 @@ function writeMasterList() {
   .then(function(r) { return r.json(); })
   .then(function(data) {
     if (data.error) { showError(data.error); setStatus(''); return; }
+
     setStatus(data.written + ' row' + (data.written !== 1 ? 's' : '') + ' added to Master Class List');
+
+    if (data.tokens && data.tokens.length) {
+      var tokenByJobCode = {};
+      lastMasterRows.forEach(function(r, i) {
+        tokenByJobCode[r.jobCode] = data.tokens[i] || '';
+      });
+
+      var tokenLines = lastMasterRows.map(function(r, i) {
+        return r.jobCode + '\t' + (data.tokens[i] || '');
+      });
+      document.getElementById('tokensOut').value = tokenLines.join('\n');
+      document.getElementById('tokensBlock').style.display = 'block';
+
+      var jobDetailsLink = cleanField(document.getElementById('jobDetailsLink').value);
+      var noteBlocks = lastWiwEntries.map(function(entry) {
+        var token = tokenByJobCode[entry.jobCode] || '';
+        var lines = [
+          entry.wiwName,
+          jobDetailsLink || '(no Job Details link entered)',
+          'Portal Token: ' + token
+        ];
+        return lines.join('\n\n--\n\n');
+      });
+      document.getElementById('shiftNotesOut').value = noteBlocks.join('\n\n--\n\n');
+      document.getElementById('shiftNotesBlock').style.display = 'block';
+
+      document.getElementById('shiftNotesBlock').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   })
   .catch(function(err) {
     showError('Writing to Master Class List failed: ' + err.message);
@@ -725,13 +790,18 @@ function copyOut(id) {
 }
 
 function clearAll() {
-  ['clientName','studentName','termName','pasteBlock'].forEach(function(id){
+  ['clientName','studentName','termName','pasteBlock','jobDetailsLink'].forEach(function(id){
     document.getElementById(id).value = '';
   });
   document.getElementById('sourceTz').value = '0';
   document.getElementById('courseBody').innerHTML = '';
   rowCount = 0;
+  lastWiwEntries = [];
   document.getElementById('resultSection').style.display = 'none';
+  document.getElementById('tokensBlock').style.display = 'none';
+  document.getElementById('tokensOut').value = '';
+  document.getElementById('shiftNotesBlock').style.display = 'none';
+  document.getElementById('shiftNotesOut').value = '';
   document.getElementById('errorArea').style.display = 'none';
   setStatus('');
 }
@@ -754,7 +824,7 @@ function cleanField(str) {
 </script>
 
 <div style="text-align:center; margin-top:32px; font-family:'DM Sans',sans-serif; font-size:11px; color:#8a9bb5; letter-spacing:0.03em;">
-  Authorized Use Only &mdash; Intellitext LLC 2026 &mdash; V 2.6
+  Authorized Use Only &mdash; Intellitext LLC 2026 &mdash; V 2.8
 </div>
 
 </body>

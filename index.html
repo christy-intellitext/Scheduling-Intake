@@ -292,17 +292,6 @@ NURS 419.1002, TTh, 1-2:15pm</div>
       <textarea id="timeOut" readonly></textarea>
     </div>
 
-    <div class="output-block" id="tokensBlock" style="display:none;">
-      <div class="output-header">
-        <div>
-          <div class="output-label">Portal Tokens</div>
-          <div class="output-hint">Job code paired with its new Portal Token &mdash; for your own reference</div>
-        </div>
-        <button class="btn btn-sm" onclick="copyOut('tokensOut')">Copy</button>
-      </div>
-      <textarea id="tokensOut" readonly></textarea>
-    </div>
-
     <div class="output-block" id="shiftNotesBlock" style="display:none;">
       <div class="output-header">
         <div>
@@ -576,8 +565,6 @@ function generate() {
   lastFolderLinks = {};
   lastWiwEntries = [];
 
-  document.getElementById('tokensBlock').style.display = 'none';
-  document.getElementById('tokensOut').value = '';
   document.getElementById('shiftNotesBlock').style.display = 'none';
   document.getElementById('shiftNotesOut').value = '';
 
@@ -753,12 +740,6 @@ function writeMasterList() {
         tokenByJobCode[r.jobCode] = data.tokens[i] || '';
       });
 
-      var tokenLines = lastMasterRows.map(function(r, i) {
-        return r.jobCode + '\t' + (data.tokens[i] || '');
-      });
-      document.getElementById('tokensOut').value = tokenLines.join('\n');
-      document.getElementById('tokensBlock').style.display = 'block';
-
       var jobDetailsLink = cleanField(document.getElementById('jobDetailsLink').value);
       var noteBlocks = lastWiwEntries.map(function(entry) {
         var token = tokenByJobCode[entry.jobCode] || '';
@@ -798,8 +779,6 @@ function clearAll() {
   rowCount = 0;
   lastWiwEntries = [];
   document.getElementById('resultSection').style.display = 'none';
-  document.getElementById('tokensBlock').style.display = 'none';
-  document.getElementById('tokensOut').value = '';
   document.getElementById('shiftNotesBlock').style.display = 'none';
   document.getElementById('shiftNotesOut').value = '';
   document.getElementById('errorArea').style.display = 'none';

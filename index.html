@@ -312,7 +312,6 @@ NURS 419.1002, TTh, 1-2:15pm</div>
 <script>
 // Paste your deployed Apps Script Web App /exec URL here (see ClassFolderCreator.gs)
 var FOLDER_API_URL = 'https://script.google.com/macros/s/AKfycbzzyhckLhiPX9c_2aA-FQUNESRe6OO8kBwiA4lBFtpBRjyvLjhOXn-YndLK9mgcZ8gWqA/exec';
-var PORTAL_URL = 'https://jobreporting.intellitext.us';
 
 var rowCount = 0;
 var lastFolderLinks = {}; // course code -> Drive folder URL, populated by createClassFolders()
@@ -589,21 +588,24 @@ function generate() {
 
     var sectPart = c.sect ? ' ' + c.sect : '';
     var jobCode = c.code + sectPart;
-    var base = student + ' - ' + c.code + sectPart + daysPart;
+    var courseOnly = c.code + sectPart + daysPart;
+    var base = student + ' - ' + courseOnly;
 
     if (c.teamType === 'solo') {
       lastMasterRows.push({ client: client, student: student, term: term, jobCode: jobCode, code: c.code });
       var wiwName = base + buildSuffix('', c.loc);
+      var courseLine = courseOnly + buildSuffix('', c.loc);
       wiwLines.push(wiwName);
       timeLines.push(timeConverted ? wiwName + '    ' + timeConverted + tzLabel : wiwName);
-      lastWiwEntries.push({ wiwName: wiwName, jobCode: jobCode });
+      lastWiwEntries.push({ wiwName: wiwName, courseLine: courseLine, jobCode: jobCode });
 
     } else if (c.teamType === 'team') {
       lastMasterRows.push({ client: client, student: student, term: term, jobCode: jobCode, code: c.code });
       var wiwName = base + buildSuffix('Teamed', c.loc);
+      var courseLine = courseOnly + buildSuffix('Teamed', c.loc);
       wiwLines.push(wiwName);
       timeLines.push(timeConverted ? wiwName + '    ' + timeConverted + tzLabel : wiwName);
-      lastWiwEntries.push({ wiwName: wiwName, jobCode: jobCode });
+      lastWiwEntries.push({ wiwName: wiwName, courseLine: courseLine, jobCode: jobCode });
 
     } else if (c.teamType === 'seq') {
       var n = c.parts || 2;
@@ -611,10 +613,11 @@ function generate() {
       lastMasterRows.push({ client: client, student: student, term: term, jobCode: jobCode, code: c.code });
       for (var i=1; i<=n; i++) {
         var wiwName = base + buildSuffix('Sequential team ' + i + '/' + n, c.loc);
+        var courseLine = courseOnly + buildSuffix('Sequential team ' + i + '/' + n, c.loc);
         var t = slices[i-1] || timeConverted;
         wiwLines.push(wiwName);
         timeLines.push(t ? wiwName + '    ' + t + tzLabel : wiwName);
-        lastWiwEntries.push({ wiwName: wiwName, jobCode: jobCode });
+        lastWiwEntries.push({ wiwName: wiwName, courseLine: courseLine, jobCode: jobCode });
       }
     }
   });
@@ -745,9 +748,8 @@ function writeMasterList() {
       var noteBlocks = lastWiwEntries.map(function(entry) {
         var token = tokenByJobCode[entry.jobCode] || '';
         var lines = [
-          entry.wiwName,
+          entry.courseLine,
           jobDetailsLink || '(no Job Details link entered)',
-          PORTAL_URL,
           'Portal Token: ' + token
         ];
         return lines.join('\n---\n');

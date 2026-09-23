@@ -72,6 +72,19 @@
   .col-parts { min-width: 70px; width: 8%; }
   .col-loc { min-width: 0; width: auto; }
   .col-del { min-width: 30px; width: 30px; }
+
+  /* Combined shift notes: time on the left, notes on the right, one row per shift */
+  .notes-list { background: #fff; max-height: 560px; overflow-y: auto; }
+  .note-row { display: grid; grid-template-columns: 190px 1fr auto; gap: 14px; padding: 12px 14px; border-bottom: 1px solid #eef0f4; align-items: start; transition: background 0.15s; }
+  .note-row:last-child { border-bottom: none; }
+  .note-time { background: #eef0f4; border-radius: 6px; padding: 9px 11px; }
+  .note-time .t { font-size: 14px; font-weight: 700; color: #1e3a5f; white-space: nowrap; }
+  .note-time .n { font-size: 11px; color: #6b7e99; margin-top: 3px; line-height: 1.4; }
+  .note-text { font-family: 'Courier New', monospace; font-size: 12px; line-height: 1.6; white-space: pre-wrap; word-break: break-all; color: #1a1a1a; margin: 0; }
+  .note-row.copied { background: #f0fdf4; }
+  .note-row.copied .note-time { background: #dcfce7; }
+  .note-row.copied .btn { background: #16a34a; border-color: #16a34a; color: #fff; }
+  @media (max-width: 640px) { .note-row { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -281,7 +294,7 @@ NURS 419.1002, TTh, 1-2:15pm</div>
       <textarea id="wiwOut" readonly></textarea>
     </div>
 
-    <div class="output-block">
+    <div class="output-block" id="timeRefBlock">
       <div class="output-header">
         <div>
           <div class="output-label">Time reference</div>
@@ -296,11 +309,12 @@ NURS 419.1002, TTh, 1-2:15pm</div>
       <div class="output-header">
         <div>
           <div class="output-label">WIW Shift Notes</div>
-          <div class="output-hint">Paste the matching block into the WIW shift notes for each shift.</div>
+          <div class="output-hint">Shift time on the left, notes on the right. Copy each shift's notes into its WhenIWork notes field.</div>
         </div>
-        <button class="btn btn-sm" onclick="copyOut('shiftNotesOut')">Copy</button>
+        <button class="btn btn-sm" onclick="copyOut('shiftNotesOut')">Copy all</button>
       </div>
-      <textarea id="shiftNotesOut" readonly style="height:220px;"></textarea>
+      <div class="notes-list" id="shiftNotesList"></div>
+      <textarea id="shiftNotesOut" readonly style="display:none;"></textarea>
     </div>
 
     <p class="hint">Transcript destination column left blank &mdash; add Drive links manually after pasting into the sheet, or use "Create class folders" above to fill it in automatically. Portal Tokens and WIW Shift Notes are only generated once you click "Generate Portal Tokens and write to Master Class List" (tokens are written straight into the sheet).</p>
@@ -316,7 +330,7 @@ var FOLDER_API_URL = 'https://script.google.com/macros/s/AKfycbzzyhckLhiPX9c_2aA
 var rowCount = 0;
 var lastFolderLinks = {}; // course code -> Drive folder URL, populated by createClassFolders()
 var lastMasterRows = []; // {client, student, term, jobCode, code} for the most recent "Generate outputs" run
-var lastWiwEntries = []; // {wiwName, jobCode} one per WIW shift line (multiple per course for teamed/sequential)
+var lastWiwEntries = []; // {wiwName, courseLine, jobCode, time, days} one per WIW shift line (multiple per course for teamed/sequential)
 
 var LOCATION_OPTIONS = [
   { value: '',         label: 'None' },
@@ -565,8 +579,7 @@ function generate() {
   lastFolderLinks = {};
   lastWiwEntries = [];
 
-  document.getElementById('shiftNotesBlock').style.display = 'none';
-  document.getElementById('shiftNotesOut').value = '';
+  resetShiftNotes();
 
   courses.forEach(function(c) {
     if (c.time) {
@@ -595,17 +608,19 @@ function generate() {
       lastMasterRows.push({ client: client, student: student, term: term, jobCode: jobCode, code: c.code });
       var wiwName = base + buildSuffix('', c.loc);
       var courseLine = courseOnly + buildSuffix('', c.loc);
+      var shiftTime = timeConverted ? timeConverted + tzLabel : '';
       wiwLines.push(wiwName);
-      timeLines.push(timeConverted ? wiwName + '    ' + timeConverted + tzLabel : wiwName);
-      lastWiwEntries.push({ wiwName: wiwName, courseLine: courseLine, jobCode: jobCode });
+      timeLines.push(shiftTime ? wiwName + '    ' + shiftTime : wiwName);
+      lastWiwEntries.push({ wiwName: wiwName, courseLine: courseLine, jobCode: jobCode, time: shiftTime, days: c.days });
 
     } else if (c.teamType === 'team') {
       lastMasterRows.push({ client: client, student: student, term: term, jobCode: jobCode, code: c.code });
       var wiwName = base + buildSuffix('Teamed', c.loc);
       var courseLine = courseOnly + buildSuffix('Teamed', c.loc);
+      var shiftTime = timeConverted ? timeConverted + tzLabel : '';
       wiwLines.push(wiwName);
-      timeLines.push(timeConverted ? wiwName + '    ' + timeConverted + tzLabel : wiwName);
-      lastWiwEntries.push({ wiwName: wiwName, courseLine: courseLine, jobCode: jobCode });
+      timeLines.push(shiftTime ? wiwName + '    ' + shiftTime : wiwName);
+      lastWiwEntries.push({ wiwName: wiwName, courseLine: courseLine, jobCode: jobCode, time: shiftTime, days: c.days, label: 'Teamed' });
 
     } else if (c.teamType === 'seq') {
       var n = c.parts || 2;
@@ -615,9 +630,10 @@ function generate() {
         var wiwName = base + buildSuffix('Sequential team ' + i + '/' + n, c.loc);
         var courseLine = courseOnly + buildSuffix('Sequential team ' + i + '/' + n, c.loc);
         var t = slices[i-1] || timeConverted;
+        var shiftTime = t ? t + tzLabel : '';
         wiwLines.push(wiwName);
-        timeLines.push(t ? wiwName + '    ' + t + tzLabel : wiwName);
-        lastWiwEntries.push({ wiwName: wiwName, courseLine: courseLine, jobCode: jobCode });
+        timeLines.push(shiftTime ? wiwName + '    ' + shiftTime : wiwName);
+        lastWiwEntries.push({ wiwName: wiwName, courseLine: courseLine, jobCode: jobCode, time: shiftTime, days: c.days, label: 'Part ' + i + ' of ' + n });
       }
     }
   });
@@ -745,16 +761,36 @@ function writeMasterList() {
       });
 
       var jobDetailsLink = cleanField(document.getElementById('jobDetailsLink').value);
-      var noteBlocks = lastWiwEntries.map(function(entry) {
+      var listEl = document.getElementById('shiftNotesList');
+      listEl.innerHTML = '';
+      var noteBlocks = [];
+
+      lastWiwEntries.forEach(function(entry) {
         var token = tokenByJobCode[entry.jobCode] || '';
-        var lines = [
+        var noteText = [
           entry.courseLine,
           jobDetailsLink || '(no Job Details link entered)',
           'Portal Token: ' + token
-        ];
-        return lines.join('\n---\n');
+        ].join('\n---\n');
+        noteBlocks.push(noteText);
+
+        var sub = [entry.days, entry.label].filter(Boolean).join(' \u00b7 ');
+        var row = document.createElement('div');
+        row.className = 'note-row';
+        row.innerHTML =
+          '<div class="note-time">' +
+            '<div class="t">' + esc(entry.time || 'No time entered') + '</div>' +
+            (sub ? '<div class="n">' + esc(sub) + '</div>' : '') +
+          '</div>' +
+          '<pre class="note-text">' + esc(noteText) + '</pre>' +
+          '<button class="btn btn-sm">Copy</button>';
+        var btn = row.querySelector('button');
+        btn.onclick = function() { copyNote(noteText, row, btn); };
+        listEl.appendChild(row);
       });
+
       document.getElementById('shiftNotesOut').value = noteBlocks.join('\n\n');
+      document.getElementById('timeRefBlock').style.display = 'none';
       document.getElementById('shiftNotesBlock').style.display = 'block';
 
       document.getElementById('shiftNotesBlock').scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -764,6 +800,22 @@ function writeMasterList() {
     showError('Writing to Master Class List failed: ' + err.message);
     setStatus('');
   });
+}
+
+function copyNote(text, row, btn) {
+  navigator.clipboard.writeText(text).then(function() {
+    row.classList.add('copied');
+    btn.textContent = 'Copied \u2713';
+    setStatus('Copied to clipboard');
+    setTimeout(function(){ setStatus(''); }, 2000);
+  });
+}
+
+function resetShiftNotes() {
+  document.getElementById('shiftNotesBlock').style.display = 'none';
+  document.getElementById('shiftNotesOut').value = '';
+  document.getElementById('shiftNotesList').innerHTML = '';
+  document.getElementById('timeRefBlock').style.display = 'block';
 }
 
 function copyOut(id) {
@@ -783,8 +835,7 @@ function clearAll() {
   rowCount = 0;
   lastWiwEntries = [];
   document.getElementById('resultSection').style.display = 'none';
-  document.getElementById('shiftNotesBlock').style.display = 'none';
-  document.getElementById('shiftNotesOut').value = '';
+  resetShiftNotes();
   document.getElementById('errorArea').style.display = 'none';
   setStatus('');
 }
@@ -807,7 +858,7 @@ function cleanField(str) {
 </script>
 
 <div style="text-align:center; margin-top:32px; font-family:'DM Sans',sans-serif; font-size:11px; color:#8a9bb5; letter-spacing:0.03em;">
-  Authorized Use Only &mdash; Intellitext LLC 2026 &mdash; V 2.8
+  Authorized Use Only &mdash; Intellitext LLC 2026 &mdash; V 2.9
 </div>
 
 </body>

@@ -287,11 +287,12 @@ NURS 419.1002, TTh, 1-2:15pm</div>
       <div class="output-header">
         <div>
           <div class="output-label">WhenIWork job site names</div>
-          <div class="output-hint">One entry per shift &mdash; includes team labels and location notes (no time)</div>
+          <div class="output-hint">Shift time on the left for reference. Copy each job site name one at a time.</div>
         </div>
-        <button class="btn btn-sm" onclick="copyOut('wiwOut')">Copy</button>
+        <button class="btn btn-sm" onclick="copyOut('wiwOut')">Copy all</button>
       </div>
-      <textarea id="wiwOut" readonly></textarea>
+      <div class="notes-list" id="wiwList"></div>
+      <textarea id="wiwOut" readonly style="display:none;"></textarea>
     </div>
 
     <div class="output-block" id="timeRefBlock">
@@ -640,6 +641,11 @@ function generate() {
 
   document.getElementById('masterOut').value = buildMasterOutText();
   document.getElementById('wiwOut').value = wiwLines.join('\n');
+  var wiwListEl = document.getElementById('wiwList');
+  wiwListEl.innerHTML = '';
+  lastWiwEntries.forEach(function(entry) {
+    wiwListEl.appendChild(buildCopyRow(entry, entry.wiwName));
+  });
   document.getElementById('timeOut').value = timeLines.join('\n');
   document.getElementById('resultSection').style.display = 'block';
   setStatus(courses.length + ' course' + (courses.length!==1?'s':'') + ' processed');
@@ -773,20 +779,7 @@ function writeMasterList() {
           'Portal Token: ' + token
         ].join('\n---\n');
         noteBlocks.push(noteText);
-
-        var sub = [entry.days, entry.label].filter(Boolean).join(' \u00b7 ');
-        var row = document.createElement('div');
-        row.className = 'note-row';
-        row.innerHTML =
-          '<div class="note-time">' +
-            '<div class="t">' + esc(entry.time || 'No time entered') + '</div>' +
-            (sub ? '<div class="n">' + esc(sub) + '</div>' : '') +
-          '</div>' +
-          '<pre class="note-text">' + esc(noteText) + '</pre>' +
-          '<button class="btn btn-sm">Copy</button>';
-        var btn = row.querySelector('button');
-        btn.onclick = function() { copyNote(noteText, row, btn); };
-        listEl.appendChild(row);
+        listEl.appendChild(buildCopyRow(entry, noteText));
       });
 
       document.getElementById('shiftNotesOut').value = noteBlocks.join('\n\n');
@@ -800,6 +793,23 @@ function writeMasterList() {
     showError('Writing to Master Class List failed: ' + err.message);
     setStatus('');
   });
+}
+
+// One row: time box on the left, text in the middle, its own Copy button on the right
+function buildCopyRow(entry, text) {
+  var sub = [entry.days, entry.label].filter(Boolean).join(' \u00b7 ');
+  var row = document.createElement('div');
+  row.className = 'note-row';
+  row.innerHTML =
+    '<div class="note-time">' +
+      '<div class="t">' + esc(entry.time || 'No time entered') + '</div>' +
+      (sub ? '<div class="n">' + esc(sub) + '</div>' : '') +
+    '</div>' +
+    '<pre class="note-text">' + esc(text) + '</pre>' +
+    '<button class="btn btn-sm">Copy</button>';
+  var btn = row.querySelector('button');
+  btn.onclick = function() { copyNote(text, row, btn); };
+  return row;
 }
 
 function copyNote(text, row, btn) {
@@ -832,6 +842,7 @@ function clearAll() {
   });
   document.getElementById('sourceTz').value = '0';
   document.getElementById('courseBody').innerHTML = '';
+  document.getElementById('wiwList').innerHTML = '';
   rowCount = 0;
   lastWiwEntries = [];
   document.getElementById('resultSection').style.display = 'none';
@@ -858,7 +869,7 @@ function cleanField(str) {
 </script>
 
 <div style="text-align:center; margin-top:32px; font-family:'DM Sans',sans-serif; font-size:11px; color:#8a9bb5; letter-spacing:0.03em;">
-  Authorized Use Only &mdash; Intellitext LLC 2026 &mdash; V 2.9
+  Authorized Use Only &mdash; Intellitext LLC 2026 &mdash; V 3.0
 </div>
 
 </body>

@@ -188,7 +188,7 @@
       </div>
       <div class="field">
         <label>Student first name</label>
-        <input type="text" id="studentName" placeholder="e.g. Lex">
+        <input type="text" id="studentName" 
       </div>
       <div class="field">
         <label>Term</label>
@@ -222,18 +222,13 @@
     <div class="section-label">Courses</div>
 
     <div class="field" style="margin-bottom:10px;">
-      <label>One per line (Course code, Days, Start-End time)</label>
+      <label>One course per line (Course code/Name, Days, Start-End time)</label>
       <div class="paste-row">
         <textarea id="pasteBlock" placeholder="FILM 300, W, 6:00-9:00pm&#10;ENG 101, TTH, 10:00-12:45pm&#10;MATH 417, MW, 10:00-12:45pm"></textarea>
         <div class="paste-actions">
           <button class="btn" onclick="importPaste()">Import &darr;</button>
           <button class="btn" onclick="document.getElementById('pasteBlock').value=''" style="font-size:12px;opacity:0.7;">Clear</button>
         </div>
-      </div>
-      <div class="format-hint">
-        Each line must be in this exact order, comma-separated: Course code, Days, Start-End time
-        <div class="example">FILM 300.1001, W, 6:00-9:00pm
-NURS 419.1002, TTh, 1-2:15pm</div>
       </div>
     </div>
 

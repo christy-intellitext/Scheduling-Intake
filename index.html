@@ -779,7 +779,7 @@ function writeMasterList() {
           jobDetailsLink || '(no Job Details link entered)'
         ];
         if (token) {
-          noteParts.push('Direct Report Link: ' + PORTAL_URL + '?token=' + encodeURIComponent(token));
+          noteParts.push('Portal Report Link: ' + PORTAL_URL + '?token=' + encodeURIComponent(token));
         }
         noteParts.push('Portal Token: ' + token);
         var noteText = noteParts.join('\n---\n');

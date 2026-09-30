@@ -325,6 +325,10 @@
 // Paste your deployed Apps Script Web App /exec URL here (see ClassFolderCreator.gs)
 var FOLDER_API_URL = 'https://script.google.com/macros/s/AKfycbzzyhckLhiPX9c_2aA-FQUNESRe6OO8kBwiA4lBFtpBRjyvLjhOXn-YndLK9mgcZ8gWqA/exec';
 
+// Class Reporting Portal address. Shift notes get a link to this page with
+// the class's token built in, so transcribers can report in one tap.
+var PORTAL_URL = 'https://christy-intellitext.github.io/Intellitext-Portal/';
+
 var rowCount = 0;
 var lastFolderLinks = {}; // course code -> Drive folder URL, populated by createClassFolders()
 var lastMasterRows = []; // {client, student, term, jobCode, code} for the most recent "Generate outputs" run
@@ -770,11 +774,15 @@ function writeMasterList() {
 
       lastWiwEntries.forEach(function(entry) {
         var token = tokenByJobCode[entry.jobCode] || '';
-        var noteText = [
+        var noteParts = [
           entry.courseLine,
-          jobDetailsLink || '(no Job Details link entered)',
-          'Portal Token: ' + token
-        ].join('\n---\n');
+          jobDetailsLink || '(no Job Details link entered)'
+        ];
+        if (token) {
+          noteParts.push('Direct Report Link: ' + PORTAL_URL + '?token=' + encodeURIComponent(token));
+        }
+        noteParts.push('Portal Token: ' + token);
+        var noteText = noteParts.join('\n---\n');
         noteBlocks.push(noteText);
         listEl.appendChild(buildCopyRow(entry, noteText));
       });
